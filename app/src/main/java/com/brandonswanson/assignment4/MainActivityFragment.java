@@ -60,7 +60,7 @@ public class MainActivityFragment extends Fragment {
 
             try {
                 // Construct the URL for the query
-                URL url = new URL("http://swansonbassign3.appspot.com/playlist.json");
+                URL url = new URL( Constants.API_ROOT + "/playlist.json");
 
                 // Create the request to my api, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
