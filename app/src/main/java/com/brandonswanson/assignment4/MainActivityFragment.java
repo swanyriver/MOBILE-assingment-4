@@ -1,9 +1,9 @@
 package com.brandonswanson.assignment4;
 
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,17 +25,12 @@ public class MainActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         layout = (LinearLayout) view.findViewById(R.id.playlistListView);
 
-        new getPs().execute();
+        new GetAllPlaylists().execute();
 
         return view;
     }
 
-    private class getPs extends AsyncTask<Void,Void,String> {
-
-        @Override
-        protected void onPreExecute() {
-            Log.d("ASYNC", "pre execute");
-        }
+    private class GetAllPlaylists extends AsyncTask<Void,Void,String> {
 
         @Override
         protected String doInBackground(Void... params) {
@@ -45,10 +40,22 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
 
-            for (PlaylistRow.PlaylistPreview plist:
-                    PlaylistRow.PlaylistPreview.PlaylistPreviewFactory(s)) {
-                layout.addView(new PlaylistRow(layout.getContext(),plist));
+            Snackbar failureNotification = Snackbar
+                    .make(layout, "Playlists are currently Unavailable", Snackbar.LENGTH_LONG);
+
+            if (s == null){
+                failureNotification.show();
+            } else {
+                for (PlaylistRow.PlaylistPreview plist:
+                        PlaylistRow.PlaylistPreview.PlaylistPreviewFactory(s)) {
+                    layout.addView(new PlaylistRow(layout.getContext(), plist, MainActivityFragment.this));
+                }
+
+                if (layout.getChildCount() == 0) {
+                    failureNotification.show();
+                }
             }
+
 
         }
     }
