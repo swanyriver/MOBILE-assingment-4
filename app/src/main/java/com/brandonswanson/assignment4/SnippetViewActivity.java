@@ -11,16 +11,21 @@ import android.view.View;
 public class SnippetViewActivity extends AppCompatActivity {
 
     private static final String TAG = "SNIPPET_VIEW_ACTIVITY";
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snippet_view);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void setTitle(String title){
+        mToolbar.setTitle(title);
     }
 
 }

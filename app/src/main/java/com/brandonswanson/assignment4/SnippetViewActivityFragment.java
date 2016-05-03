@@ -5,21 +5,23 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.Format;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +35,11 @@ public class SnippetViewActivityFragment extends Fragment {
     private ArrayList<Snippet> mSnippets;
     private YouTubePlayer mPlayer;
     private int mIndex = 0;
+    private GestureDetector mDetector;
+    private ImageButton mPrevButton;
+    private ImageButton mNextButton;
+    private TextView mTitleText;
+    private TextView mNotesText;
 
 
     public SnippetViewActivityFragment() {
@@ -43,9 +50,38 @@ public class SnippetViewActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         mMainview = (LinearLayout) inflater.inflate(R.layout.fragment_snippet_view, container, false);
 
-/*        YouTubePlayerSupportFragment youTubePlayerFragment = (YouTubePlayerSupportFragment) getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.youtube_fragment);*/
-        YouTubePlayerFragment youTubePlayerFragment = (YouTubePlayerFragment) getActivity().getFragmentManager().findFragmentById(R.id.youtube_fragment);
+        mDetector = new GestureDetector(getActivity().getApplicationContext(), new myGuestureDetect());
+        mMainview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(TAG, "onTouch: touchytouchy");
+                mDetector.onTouchEvent(event);
+
+                return true;
+            }
+        });
+
+        mPrevButton = (ImageButton) mMainview.findViewById(R.id.prev);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prevSnippet();
+            }
+        });
+        mNextButton = (ImageButton) mMainview.findViewById(R.id.next);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextSnippet();
+            }
+        });
+
+        mTitleText = (TextView) mMainview.findViewById(R.id.Title_textView);
+        mNotesText = (TextView) mMainview.findViewById(R.id.notes_textView);
+
+
+
+        final YouTubePlayerFragment youTubePlayerFragment = (YouTubePlayerFragment) getActivity().getFragmentManager().findFragmentById(R.id.youtube_fragment);
         youTubePlayerFragment.initialize(Secret.API_KEY, new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
@@ -75,12 +111,14 @@ public class SnippetViewActivityFragment extends Fragment {
     }
 
     private void nextSnippet(){
+        Log.d(TAG, "nextSnippet: requested");
         if (mSnippets == null || mIndex >= mSnippets.size() -1 ) return;
         mIndex += 1;
         loadSnippet(true);
     }
 
     private void prevSnippet(){
+        Log.d(TAG, "prevSnippet: requested");
         if (mSnippets == null || mIndex <= 0 ) return;
         mIndex -= 1;
         loadSnippet(false);
@@ -98,17 +136,23 @@ public class SnippetViewActivityFragment extends Fragment {
             return;
         }
 
-        Snippet snp = mSnippets.get(mIndex);
+        Snippet snpt = mSnippets.get(mIndex);
 
-        Log.d(TAG, "loadSnippet: " + snp);
+        Log.d(TAG, "loadSnippet: " + snpt);
 
         //load new video at starting time
-        mPlayer.loadVideo(snp.videoID, snp.startTime * Constants.MILLIS_PER_SECOND);
+        mPlayer.loadVideo(snpt.videoID, snpt.startTime * Constants.MILLIS_PER_SECOND);
 
         //stop previous handler
         //start handler again but watching for new time
+
         //change title and notes text
-        //correctly enable/dissable next/prev buttons  //todo not entirly necesary, good for indicating begining and end of list though
+        mNotesText.setText(snpt.notes != null ? snpt.notes : "");
+        mTitleText.setText(snpt.title);
+
+        //correctly enable/dissable next/prev buttons
+        mPrevButton.setVisibility(mIndex > 0 ? View.VISIBLE : View.INVISIBLE);
+        mNextButton.setVisibility((mIndex < mSnippets.size() - 1) ? View.VISIBLE : View.INVISIBLE);
     }
 
     private class getPlaylist extends AsyncTask<Void,Void,String> {
@@ -132,6 +176,15 @@ public class SnippetViewActivityFragment extends Fragment {
                 if (mSnippets.size() == 0) {
                     failureNotification.show();
                 } else {
+
+                    try {
+                        JSONObject playlist = new JSONObject(s);
+                        getActivity().setTitle(playlist.getString("title"));
+                    } catch (JSONException e) {
+                        Log.e(TAG, "onPostExecute: unable to change title");
+                        e.printStackTrace();
+                    }
+
                     loadSnippet();
                 }
             }
@@ -174,7 +227,7 @@ public class SnippetViewActivityFragment extends Fragment {
                                 snippet.getString("videoID"),
                                 snippet.getString("url"),
                                 snippet.getString("title"),
-                                snippet.getString("notes"),
+                                snippet.isNull("notes") ? null : snippet.getString("notes"),
                                 snippet.getInt("startTime"),
                                 snippet.getInt("endTime")
                         ));
@@ -189,6 +242,21 @@ public class SnippetViewActivityFragment extends Fragment {
             }
 
             return playlistList;
+        }
+    }
+
+    class myGuestureDetect extends GestureDetector.SimpleOnGestureListener {
+        private static final int SWIPE_THRESHOLD = 2000;
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.d(TAG, "onFling: velocityX:" + velocityX);
+            if (velocityX  < -SWIPE_THRESHOLD){
+                nextSnippet();
+            } else if (velocityX > SWIPE_THRESHOLD){
+                prevSnippet();
+            }
+            return true;
         }
     }
 }

@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This is the fragment?"
+        android:id="@+id/Title_textView"
         />
 
     <fragment
@@ -21,5 +21,40 @@
         android:id="@+id/youtube_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    
+    <RelativeLayout
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_previous"
+            android:layout_alignParentLeft="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="invisible"
+            />
+
+        <ImageButton
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_next"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="invisible"
+            />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/notes_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
 
 </LinearLayout>
