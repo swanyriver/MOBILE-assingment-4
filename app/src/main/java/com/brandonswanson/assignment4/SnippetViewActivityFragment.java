@@ -241,7 +241,7 @@ public class SnippetViewActivityFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            return playlistList;
+            return playlistList.isEmpty() ? null : playlistList;
         }
     }
 
