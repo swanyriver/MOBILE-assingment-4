@@ -10,6 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +31,8 @@ public class SnippetViewActivityFragment extends Fragment {
     private String mURL;
     private LinearLayout mMainview;
     private ArrayList<Snippet> mSnippets;
+    private YouTubePlayer mPlayer;
+    private int mIndex = 0;
 
 
     public SnippetViewActivityFragment() {
@@ -36,6 +43,28 @@ public class SnippetViewActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         mMainview = (LinearLayout) inflater.inflate(R.layout.fragment_snippet_view, container, false);
 
+/*        YouTubePlayerSupportFragment youTubePlayerFragment = (YouTubePlayerSupportFragment) getActivity().getSupportFragmentManager()
+                .findFragmentById(R.id.youtube_fragment);*/
+        YouTubePlayerFragment youTubePlayerFragment = (YouTubePlayerFragment) getActivity().getFragmentManager().findFragmentById(R.id.youtube_fragment);
+        youTubePlayerFragment.initialize(Secret.API_KEY, new YouTubePlayer.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                mPlayer = youTubePlayer;
+                Log.d(TAG, "onInitializationSuccess: " + "youtube player initialized");
+
+                loadSnippet();
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                Snackbar failureNotification = Snackbar
+                        .make(mMainview, "YouTube unable to initialize", Snackbar.LENGTH_LONG);
+                failureNotification.show();
+                Log.e(TAG, "onInitializationFailure: " + youTubeInitializationResult.toString() );
+
+            }
+        });
+
         mURL = getActivity().getIntent().getExtras().getString(Constants.URL_KEY);
 
         Log.d(TAG, "onCreate: url:" + mURL);
@@ -43,6 +72,43 @@ public class SnippetViewActivityFragment extends Fragment {
         new getPlaylist().execute();
 
         return mMainview;
+    }
+
+    private void nextSnippet(){
+        if (mSnippets == null || mIndex >= mSnippets.size() -1 ) return;
+        mIndex += 1;
+        loadSnippet(true);
+    }
+
+    private void prevSnippet(){
+        if (mSnippets == null || mIndex <= 0 ) return;
+        mIndex -= 1;
+        loadSnippet(false);
+    }
+
+    private void loadSnippet(){
+        loadSnippet(true);
+    }
+
+    private void loadSnippet(boolean next){
+        if (mPlayer == null || mSnippets == null) {
+            Log.d(TAG, "loadSnippet: Elements not initialized: "  +
+                    ( mPlayer == null ? "player," : "") +
+                    (mSnippets == null ? "snippets" : ""));
+            return;
+        }
+
+        Snippet snp = mSnippets.get(mIndex);
+
+        Log.d(TAG, "loadSnippet: " + snp);
+
+        //load new video at starting time
+        mPlayer.loadVideo(snp.videoID, snp.startTime * Constants.MILLIS_PER_SECOND);
+
+        //stop previous handler
+        //start handler again but watching for new time
+        //change title and notes text
+        //correctly enable/dissable next/prev buttons  //todo not entirly necesary, good for indicating begining and end of list though
     }
 
     private class getPlaylist extends AsyncTask<Void,Void,String> {
@@ -66,7 +132,7 @@ public class SnippetViewActivityFragment extends Fragment {
                 if (mSnippets.size() == 0) {
                     failureNotification.show();
                 } else {
-                    // update UI
+                    loadSnippet();
                 }
             }
 
