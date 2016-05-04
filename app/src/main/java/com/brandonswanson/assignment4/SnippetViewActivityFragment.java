@@ -211,7 +211,7 @@ public class SnippetViewActivityFragment extends Fragment {
             } else {
                 //Log.d(TAG, "onPostExecute: \n" + s);
                 mSnippets = Snippet.snippetFactory(s);
-                if (mSnippets.size() == 0) {
+                if (mSnippets == null || mSnippets.size() == 0) {
                     failureNotification.show();
                 } else {
 
@@ -298,8 +298,8 @@ public class SnippetViewActivityFragment extends Fragment {
         }
     }
 
-    //TODO cannot instatiate one class  task can only be executed once, must make a class factory
-    public NetworkFetcher.APICall deleteSnippet = new NetworkFetcher.APICall("DELETE", new NetworkFetcher.NetworkFinish() {
+    public NetworkFetcher.APICallFactory deleteSnippet =
+            new NetworkFetcher.APICallFactory("DELETE", new NetworkFetcher.NetworkFinish() {
         @Override
         public void onNetworkResponse(int responseCode, String responseMsg) {
             if (responseCode == 202) {
@@ -330,32 +330,4 @@ public class SnippetViewActivityFragment extends Fragment {
     });
 
 
-/*
-        public void onResponse(int responseCode, String message) {
-            if (responseCode == 202) {
-                // success
-                Snackbar sucessNotification = Snackbar
-                        .make(mMainview, "Snippet Deleted", Snackbar.LENGTH_LONG);
-                sucessNotification.show();
-
-                mSnippets.remove(mIndex);
-
-                if (mSnippets.isEmpty()){
-                    mSnippets = null;
-                    mNotesText.setText("");
-                    mTitleText.setText("");
-                    mPlayer.release();
-                    mNextButton.setVisibility(View.INVISIBLE);
-                    mPrevButton.setVisibility(View.INVISIBLE);
-                } else {
-                    if (mIndex == mSnippets.size()) mIndex--;
-                    loadSnippet();
-                }
-            } else {
-                Snackbar failureNotification = Snackbar
-                        .make(mMainview, "Unable to Delete Snippet", Snackbar.LENGTH_LONG);
-                failureNotification.show();
-            }
-        }
-    };*/
 }

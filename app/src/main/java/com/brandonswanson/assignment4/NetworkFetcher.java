@@ -155,6 +155,20 @@ public class NetworkFetcher {
         void onNetworkResponse(int responseCode, String responseMsg);
     }
 
+    public static class APICallFactory {
+        private String mMethod;
+        private NetworkFetcher.NetworkFinish mNetworkListener;
+
+        public APICallFactory (String method, NetworkFetcher.NetworkFinish networkFinish){
+            mMethod = method;
+            mNetworkListener = networkFinish;
+        }
+
+        public void execute(String... params){
+            new APICall(mMethod, mNetworkListener).execute(params);
+        }
+    }
+
     public static class APICall extends AsyncTask <String, Void, NetworkResponse> {
 
         private String mMethod;
