@@ -56,7 +56,7 @@ public class SnippetViewActivityFragment extends Fragment {
         mMainview.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d(TAG, "onTouch: touchytouchy");
+                //Log.d(TAG, "onTouch: touchytouchy");
                 mDetector.onTouchEvent(event);
 
                 return true;
@@ -95,9 +95,6 @@ public class SnippetViewActivityFragment extends Fragment {
 
             @Override
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-                Snackbar failureNotification = Snackbar
-                        .make(mMainview, "YouTube unable to initialize", Snackbar.LENGTH_LONG);
-                failureNotification.show();
                 Log.e(TAG, "onInitializationFailure: " + youTubeInitializationResult.toString() );
 
             }
