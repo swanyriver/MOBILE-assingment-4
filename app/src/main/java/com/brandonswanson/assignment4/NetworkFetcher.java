@@ -1,11 +1,12 @@
 package com.brandonswanson.assignment4;
 
-import android.util.Log;
+import android.os.AsyncTask;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
@@ -14,12 +15,6 @@ import java.util.Map;
  * Created by brandon on 5/2/16.
  */
 public class NetworkFetcher {
-
-    //do I have to use Async task, can I just start a thread in here?
-    public interface networkFinishListener{
-        void onResponse(int responseCode, String message);
-    }
-
 
     // Boiler plate networking code with exception handling from
     // https://www.udacity.com/course/developing-android-apps--ud853
@@ -81,7 +76,7 @@ public class NetworkFetcher {
         return JsonStr;
     }
 
-    private static void makeAPICAll(String suburl, String Method, String postContent, networkFinishListener listener){
+    private static NetworkResponse makeAPICAll(String suburl, String Method, String postContent){
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -99,7 +94,7 @@ public class NetworkFetcher {
             urlConnection.setRequestMethod(Method);
 
 
-            //load package
+            //load package  //todo make post calls
 
 
             urlConnection.connect();
@@ -109,8 +104,7 @@ public class NetworkFetcher {
             StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
-                if (listener != null) listener.onResponse(Constants.NO_NETWORK_RESPONSE, "");
-                return;
+                return new NetworkResponse(Constants.NO_NETWORK_RESPONSE, "");
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -121,12 +115,12 @@ public class NetworkFetcher {
             }
 
             result = buffer.toString();
-            listener.onResponse(urlConnection.getResponseCode(), result);
+            return new NetworkResponse(urlConnection.getResponseCode(), result);
+
 
         } catch (IOException e) {
             e.printStackTrace();
-            if (listener != null) listener.onResponse(Constants.NO_NETWORK_RESPONSE, "");
-            return;
+            return new NetworkResponse(Constants.NO_NETWORK_RESPONSE, "");
         } finally{
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -147,13 +141,45 @@ public class NetworkFetcher {
         return map.toString();
     }
 
-    public static void deleteSnippet(final String URL, final networkFinishListener listener){
-        Thread networkThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                makeAPICAll(URL, "DELETE", null, listener);
+    private static class NetworkResponse {
+        public final int responseCode;
+        public final String msg;
+
+        public NetworkResponse(int responseCode, String msg) {
+            this.responseCode = responseCode;
+            this.msg = msg;
+        }
+    }
+
+    public interface NetworkFinish {
+        void onNetworkResponse(int responseCode, String responseMsg);
+    }
+
+    public static class APICall extends AsyncTask <String, Void, NetworkResponse> {
+
+        private String mMethod;
+        private NetworkFetcher.NetworkFinish mNetworkListener;
+
+        public APICall (String method, NetworkFetcher.NetworkFinish networkFinish){
+            mMethod = method;
+            mNetworkListener = networkFinish;
+        }
+
+        @Override
+        protected NetworkResponse doInBackground(String... urls) {
+            String url = urls[0];
+            String post = null;
+
+            if (urls.length > 1){
+                post = urls[1];
             }
-        });
-        networkThread.start();
+
+            return makeAPICAll(url, mMethod, post);
+        }
+
+        @Override
+        protected void onPostExecute(NetworkResponse response) {
+            mNetworkListener.onNetworkResponse(response.responseCode, response.msg);
+        }
     }
 }

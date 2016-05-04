@@ -96,7 +96,9 @@ public class SnippetViewActivityFragment extends Fragment {
             @Override
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
                 Log.e(TAG, "onInitializationFailure: " + youTubeInitializationResult.toString() );
-
+                Snackbar failureNotification = Snackbar
+                        .make(mMainview, "YouTube unable to initialize", Snackbar.LENGTH_LONG);
+                failureNotification.show();
             }
         });
 
@@ -295,4 +297,65 @@ public class SnippetViewActivityFragment extends Fragment {
             return true;
         }
     }
+
+    //TODO cannot instatiate one class  task can only be executed once, must make a class factory
+    public NetworkFetcher.APICall deleteSnippet = new NetworkFetcher.APICall("DELETE", new NetworkFetcher.NetworkFinish() {
+        @Override
+        public void onNetworkResponse(int responseCode, String responseMsg) {
+            if (responseCode == 202) {
+                // success
+                Snackbar sucessNotification = Snackbar
+                        .make(mMainview, "Snippet Deleted", Snackbar.LENGTH_LONG);
+                sucessNotification.show();
+
+                mSnippets.remove(mIndex);
+
+                if (mSnippets.isEmpty()){
+                    mSnippets = null;
+                    mNotesText.setText("");
+                    mTitleText.setText("");
+                    mPlayer.release();
+                    mNextButton.setVisibility(View.INVISIBLE);
+                    mPrevButton.setVisibility(View.INVISIBLE);
+                } else {
+                    if (mIndex == mSnippets.size()) mIndex--;
+                    loadSnippet();
+                }
+            } else {
+                Snackbar failureNotification = Snackbar
+                        .make(mMainview, "Unable to Delete Snippet", Snackbar.LENGTH_LONG);
+                failureNotification.show();
+            }
+        }
+    });
+
+
+/*
+        public void onResponse(int responseCode, String message) {
+            if (responseCode == 202) {
+                // success
+                Snackbar sucessNotification = Snackbar
+                        .make(mMainview, "Snippet Deleted", Snackbar.LENGTH_LONG);
+                sucessNotification.show();
+
+                mSnippets.remove(mIndex);
+
+                if (mSnippets.isEmpty()){
+                    mSnippets = null;
+                    mNotesText.setText("");
+                    mTitleText.setText("");
+                    mPlayer.release();
+                    mNextButton.setVisibility(View.INVISIBLE);
+                    mPrevButton.setVisibility(View.INVISIBLE);
+                } else {
+                    if (mIndex == mSnippets.size()) mIndex--;
+                    loadSnippet();
+                }
+            } else {
+                Snackbar failureNotification = Snackbar
+                        .make(mMainview, "Unable to Delete Snippet", Snackbar.LENGTH_LONG);
+                failureNotification.show();
+            }
+        }
+    };*/
 }

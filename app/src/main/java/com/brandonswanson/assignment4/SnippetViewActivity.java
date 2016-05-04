@@ -65,15 +65,7 @@ public class SnippetViewActivity extends AppCompatActivity {
                 break;
             case R.id.action_delete_snippet:
                 Log.d(TAG, "onOptionsItemSelected: delete snippet");
-                NetworkFetcher.deleteSnippet(snippetUrl, new NetworkFetcher.networkFinishListener() {
-                    @Override
-                    public void onResponse(int responseCode, String message) {
-                        Log.d(TAG, "onResponse: delete:" + responseCode + " " + message );
-                        Snackbar failureNotification = Snackbar
-                                .make(mToolbar, "deleted " + responseCode , Snackbar.LENGTH_LONG);
-                        failureNotification.show();
-                    }
-                });
+                myFragment.deleteSnippet.execute(snippetUrl);
                 break;
             case R.id.action_edit_snippet:
                 Log.d(TAG, "onOptionsItemSelected: edit snippet");
