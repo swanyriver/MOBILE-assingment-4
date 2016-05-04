@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import android.os.Handler;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -40,6 +41,9 @@ public class SnippetViewActivityFragment extends Fragment {
     private ImageButton mNextButton;
     private TextView mTitleText;
     private TextView mNotesText;
+    private Handler mStopHandler;
+    private Runnable mStopRunnable;
+    private boolean mAutoPlay = false;
 
 
     public SnippetViewActivityFragment() {
@@ -101,13 +105,43 @@ public class SnippetViewActivityFragment extends Fragment {
             }
         });
 
+        mStopHandler = new Handler();
+        mStopRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mPlayer != null && mSnippets != null
+                        && mPlayer.getCurrentTimeMillis() >= mSnippets.get(mIndex).endTime * Constants.MILLIS_PER_SECOND){
+
+                    if (mAutoPlay){
+                        nextSnippet();
+                    } else {
+                        mPlayer.seekToMillis(mSnippets.get(mIndex).startTime * Constants.MILLIS_PER_SECOND);
+                        mPlayer.pause();
+                    }
+
+                }
+
+                mStopHandler.postDelayed(this,Constants.MILLIS_PER_SECOND);
+            }
+        };
+        mStopHandler.postDelayed(mStopRunnable, Constants.MILLIS_PER_SECOND);
+
+
         mURL = getActivity().getIntent().getExtras().getString(Constants.URL_KEY);
 
         Log.d(TAG, "onCreate: url:" + mURL);
 
+        //GET playlist information from http in AsyncTask
         new getPlaylist().execute();
 
         return mMainview;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPlayer = null;
+        mStopHandler.removeCallbacks(mStopRunnable);
     }
 
     private void nextSnippet(){
