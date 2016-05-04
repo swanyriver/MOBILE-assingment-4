@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.brandonswanson.assignment4.SnippetViewActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_autoplay"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="Autoplay"
+        android:checkable="true"
         app:showAsAction="never" />
 </menu>

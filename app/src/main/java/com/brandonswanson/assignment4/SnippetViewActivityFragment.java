@@ -43,8 +43,6 @@ public class SnippetViewActivityFragment extends Fragment {
     private TextView mNotesText;
     private Handler mStopHandler;
     private Runnable mStopRunnable;
-    private boolean mAutoPlay = false;
-
 
     public SnippetViewActivityFragment() {
     }
@@ -112,11 +110,11 @@ public class SnippetViewActivityFragment extends Fragment {
                 if (mPlayer != null && mSnippets != null
                         && mPlayer.getCurrentTimeMillis() >= mSnippets.get(mIndex).endTime * Constants.MILLIS_PER_SECOND){
 
-                    if (mAutoPlay){
+                    mPlayer.seekToMillis(mSnippets.get(mIndex).startTime * Constants.MILLIS_PER_SECOND);
+                    mPlayer.pause();
+
+                    if (((SnippetViewActivity) getActivity()).isAutoPlayEnabled()){
                         nextSnippet();
-                    } else {
-                        mPlayer.seekToMillis(mSnippets.get(mIndex).startTime * Constants.MILLIS_PER_SECOND);
-                        mPlayer.pause();
                     }
 
                 }
