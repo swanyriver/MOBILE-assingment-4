@@ -187,6 +187,13 @@ public class SnippetViewActivityFragment extends Fragment {
         mNextButton.setVisibility((mIndex < mSnippets.size() - 1) ? View.VISIBLE : View.INVISIBLE);
     }
 
+    public String getSnippetUrl() {
+        if (mSnippets != null && ! mSnippets.isEmpty())
+            return mSnippets.get(mIndex).url;
+        else
+            return null;
+    }
+
     private class getPlaylist extends AsyncTask<Void,Void,String> {
 
         @Override
