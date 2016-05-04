@@ -49,6 +49,15 @@ public class SnippetViewActivity extends AppCompatActivity {
             case R.id.action_autoplay:
                 item.setChecked(!item.isChecked());
                 break;
+            case R.id.action_add_snippet:
+                Log.d(TAG, "onOptionsItemSelected: add snippet");
+                break;
+            case R.id.action_delete_snippet:
+                Log.d(TAG, "onOptionsItemSelected: delete snippet");
+                break;
+            case R.id.action_edit_snippet:
+                Log.d(TAG, "onOptionsItemSelected: edit snippet");
+                break;
         }
 
 
