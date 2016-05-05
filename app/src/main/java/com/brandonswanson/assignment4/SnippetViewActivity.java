@@ -1,6 +1,7 @@
 package com.brandonswanson.assignment4;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,8 @@ import android.view.MenuItem;
 public class SnippetViewActivity extends AppCompatActivity {
 
     private static final String TAG = "SNIPPET_VIEW_ACTIVITY";
+    public static final int CREATE_SNIPPET_ACTIVITY = 101;
+    private static final int EDIT_SNIPPET_ACTIVITY = 102;
     private Toolbar mToolbar;
     private MenuItem mAutoplayView;
 
@@ -65,6 +68,8 @@ public class SnippetViewActivity extends AppCompatActivity {
                 break;
             case R.id.action_add_snippet:
                 Log.d(TAG, "onOptionsItemSelected: add snippet");
+                Intent intent = new Intent(this, AddEditSnippetActivity.class);
+                startActivityForResult(intent, CREATE_SNIPPET_ACTIVITY);
                 break;
             case R.id.action_delete_snippet:
                 Log.d(TAG, "onOptionsItemSelected: delete snippet");
@@ -91,6 +96,9 @@ public class SnippetViewActivity extends AppCompatActivity {
                 break;
             case R.id.action_edit_snippet:
                 Log.d(TAG, "onOptionsItemSelected: edit snippet");
+                Intent editIntent = new Intent(this, AddEditSnippetActivity.class);
+                editIntent.putExtra("url", snippetUrl);
+                startActivityForResult(editIntent, EDIT_SNIPPET_ACTIVITY);
                 break;
         }
 

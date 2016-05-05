@@ -23,6 +23,7 @@ public class NetworkFetcher {
     // https://www.udacity.com/course/developing-android-apps--ud853
     // used as starting point
 
+    //todo replace with API factory? mabybe
     public static String fetchJSON(String suburl){
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.

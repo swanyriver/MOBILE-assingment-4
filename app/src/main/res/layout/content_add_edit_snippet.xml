@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.brandonswanson.assignment4.AddEditSnippetActivity"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_add_edit_snippet">
+
+    <TextView
+        android:text="Title:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/snippet_title_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        />
+
+
+    <fragment
+        android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+        android:id="@+id/add_edit_youtube_fragment"
+        android:layout_marginBottom="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <!-- todo controls for start and end
+
+    <TextView
+        android:text="Start and End Times:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    -->
+
+    <TextView
+        android:text="Notes (optional):"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/snippet_notes_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

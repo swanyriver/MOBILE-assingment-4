@@ -174,9 +174,6 @@ public class SnippetViewActivityFragment extends Fragment {
         //load new video at starting time
         mPlayer.loadVideo(snpt.videoID, snpt.startTime * Constants.MILLIS_PER_SECOND);
 
-        //stop previous handler
-        //start handler again but watching for new time
-
         //change title and notes text
         mNotesText.setText(snpt.notes != null ? snpt.notes : "");
         mTitleText.setText(snpt.title);

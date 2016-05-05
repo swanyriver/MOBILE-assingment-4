@@ -34,6 +34,10 @@
         <activity
             android:name=".AddPlaylistActivity"
             android:label="@string/title_activity_add_playlist"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddEditSnippetActivity"
+            android:label="@string/title_activity_add_edit_snippet"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
