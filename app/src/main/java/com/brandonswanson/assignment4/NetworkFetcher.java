@@ -1,6 +1,7 @@
 package com.brandonswanson.assignment4;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -136,9 +137,22 @@ public class NetworkFetcher {
 
     }
 
-    public static String getHTTPPOST(Map<String,Object> map){
-        //todo turn this into a k=v&
-        return map.toString();
+    public static String getHTTPPOST(Bundle extras){
+
+        StringBuilder output = new StringBuilder();
+        String prefix = "";
+
+        for (String key : extras.keySet()) {
+            String value = extras.get(key).toString();
+
+            output.append(prefix);
+            prefix = "&";
+            output.append(key);
+            output.append("=");
+            output.append(value);
+        }
+
+        return output.toString();
     }
 
     private static class NetworkResponse {

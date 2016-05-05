@@ -1,12 +1,17 @@
 package com.brandonswanson.assignment4;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int ADD_PLAYLIST_ACTIVITY = 100;
+    private static final String TAG = "MAIN Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +40,23 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_playlist) {
-
+            Intent intent = new Intent(this, AddPlaylistActivity.class);
+            startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == ADD_PLAYLIST_ACTIVITY && resultCode == RESULT_OK) {
+            //todo make network call from this activity
+            Log.d(TAG, "onActivityResult: " + NetworkFetcher.getHTTPPOST(data.getExtras()));
+        }
+
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
