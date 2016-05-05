@@ -112,6 +112,14 @@ public class SnippetViewActivity extends AppCompatActivity {
                 editIntent.putExtras(mFragment.getSerializedSnippet());
                 startActivityForResult(editIntent, EDIT_SNIPPET_ACTIVITY);
                 break;
+
+            case R.id.action_share_playlist:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, Constants.API_ROOT + mEntityUrl);
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, "Share This Playlist"));
+                break;
         }
 
 

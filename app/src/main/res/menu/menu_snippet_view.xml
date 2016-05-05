@@ -24,5 +24,10 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_mode_edit_white_48dp"
         />
+    <item android:id="@+id/action_share_playlist"
+        android:title="share"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_share_white_48dp"
+        />
 
 </menu>

@@ -44,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AddPlaylistActivity.class);
             startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
             return true;
+        } else if (id == R.id.action_share_main) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, Constants.API_ROOT);
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent, "Share This this with others"));
         }
 
         return super.onOptionsItemSelected(item);
