@@ -1,5 +1,8 @@
 package com.brandonswanson.assignment4;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +38,13 @@ public class AddEditSnippetActivity extends AppCompatActivity {
     private TextView mDialogStatusText;
     private Button mDialogOkButton;
 
+    private Button mMarkStartButton;
+    private Button mMarkEndButton;
+    private EditText mTitleEdit;
+    private EditText mNotesEdit;
+    private EditText mStartTimeEdit;
+    private EditText mEndTimeEdit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +59,27 @@ public class AddEditSnippetActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //return to calling activity with extras
-                    //todo verify all fields but notes are entered
-                    //todo pack into bundle and finish
+                    if (mTitleEdit.getText().length() == 0
+                            || mStartTimeEdit.getText().length() == 0
+                            || mEndTimeEdit.getText().length() == 0 ){
+                        Snackbar failureNotification = Snackbar
+                                .make(findViewById(R.id.add_edit_snippet_outer_layout), "Required fields must not be left blank", Snackbar.LENGTH_LONG);
+                        failureNotification.show();
+                    } else {
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("title",mTitleEdit.getText().toString());
+                        resultIntent.putExtra("videoID", mYTVideoID);
+
+                        // todo these should be fine a strings, might want to parseInt though
+                        resultIntent.putExtra("startTime", mStartTimeEdit.getText().toString());
+                        resultIntent.putExtra("endTime", mEndTimeEdit.getText().toString());
+
+                        if (mNotesEdit.getText().length() > 0) resultIntent.putExtra("notes", mNotesEdit.getText().toString());
+
+                        setResult(Activity.RESULT_OK, resultIntent);
+                        Log.d(TAG, "onClick: finishing add activity with extras");
+                        finish();
+                    }
                 }
             });
         }
@@ -111,6 +140,33 @@ public class AddEditSnippetActivity extends AppCompatActivity {
                 failureNotification.show();
             }
         });
+
+        mMarkStartButton = (Button) findViewById(R.id.mark_start_time_button);
+        mMarkEndButton = (Button) findViewById(R.id.mark_end_time_button);
+        mTitleEdit = (EditText) findViewById(R.id.snippet_title_edit);
+        mNotesEdit = (EditText) findViewById(R.id.snippet_notes_edit);
+        mStartTimeEdit = (EditText) findViewById(R.id.start_time_edittext);
+        mEndTimeEdit = (EditText) findViewById(R.id.end_time_edittext);
+
+        mMarkStartButton.setOnClickListener(new MarkTime(mStartTimeEdit));
+        mMarkEndButton.setOnClickListener(new MarkTime(mEndTimeEdit));
+
+    }
+
+    private class MarkTime implements View.OnClickListener {
+
+        private final EditText mEdit;
+
+        public MarkTime(EditText edit) {
+            mEdit = edit;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mPlayer == null) return;
+
+            mEdit.setText("" + (mPlayer.getCurrentTimeMillis() / Constants.MILLIS_PER_SECOND));
+        }
     }
 
     private void loadVideo(){
@@ -122,7 +178,10 @@ public class AddEditSnippetActivity extends AppCompatActivity {
         }
 
         //load new video at starting time
-        mPlayer.cueVideo(mYTVideoID);
+        mPlayer.loadVideo(mYTVideoID);
+
+        mMarkStartButton.setEnabled(true);
+        mMarkEndButton.setEnabled(true);
 
     }
 

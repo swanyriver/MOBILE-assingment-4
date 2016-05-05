@@ -44,6 +44,7 @@ public class PlaylistRow extends LinearLayout implements View.OnClickListener, V
     public void onClick(View v) {
         Intent pViewIntent = new Intent(mFragment.getActivity(), SnippetViewActivity.class);
         pViewIntent.putExtra(Constants.URL_KEY, mPlaylistPreview.JSON_URL);
+        pViewIntent.putExtra("entity_url", mPlaylistPreview.URL);
         mFragment.startActivity(pViewIntent);
     }
 

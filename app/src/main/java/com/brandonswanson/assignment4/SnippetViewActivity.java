@@ -1,5 +1,6 @@
 package com.brandonswanson.assignment4;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,9 +19,11 @@ public class SnippetViewActivity extends AppCompatActivity {
 
     private static final String TAG = "SNIPPET_VIEW_ACTIVITY";
     public static final int CREATE_SNIPPET_ACTIVITY = 101;
-    private static final int EDIT_SNIPPET_ACTIVITY = 102;
+    public static final int EDIT_SNIPPET_ACTIVITY = 102;
     private Toolbar mToolbar;
     private MenuItem mAutoplayView;
+    private String mEntityUrl;
+    private SnippetViewActivityFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,12 @@ public class SnippetViewActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+        mEntityUrl = getIntent().getExtras().getString("entity_url");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mFragment = (SnippetViewActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.snippet_fragment);
     }
 
     public void setTitle(String title){
@@ -51,10 +58,7 @@ public class SnippetViewActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        final SnippetViewActivityFragment myFragment = (SnippetViewActivityFragment)
-                getSupportFragmentManager().findFragmentById(R.id.snippet_fragment);
-
-        final String snippetUrl = myFragment.getSnippetUrl();
+        final String snippetUrl = mFragment.getSnippetUrl();
 
         if (snippetUrl == null && item.getItemId() != R.id.action_autoplay){
             return super.onOptionsItemSelected(item);
@@ -81,7 +85,7 @@ public class SnippetViewActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d("DIALOG", "delete snippet: clicked yes");
-                        myFragment.deleteSnippet.execute(snippetUrl);
+                        mFragment.deleteSnippet.execute(snippetUrl);
                     }
                 });
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
@@ -104,6 +108,20 @@ public class SnippetViewActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: " + requestCode);
+
+        if (resultCode != Activity.RESULT_OK) return;
+
+        if (requestCode == CREATE_SNIPPET_ACTIVITY){
+            mFragment.createSnippet.execute(mEntityUrl, NetworkFetcher.getHTTPPOST(data.getExtras()));
+        } else if (requestCode == EDIT_SNIPPET_ACTIVITY){
+
+        }
+
     }
 
     public boolean isAutoPlayEnabled(){

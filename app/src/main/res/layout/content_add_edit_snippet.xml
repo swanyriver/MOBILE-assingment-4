@@ -33,14 +33,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-
-    <!-- todo controls for start and end
-
-    <TextView
-        android:text="Start and End Times:"
+    <RelativeLayout
+        android:paddingBottom="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    -->
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Start Time (seconds)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:inputType="number"
+                android:id="@+id/start_time_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/mark_start_time_button"
+                android:text="Mark Start"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="End Time (seconds)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:inputType="number"
+                android:id="@+id/end_time_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/mark_end_time_button"
+                android:text="Mark End"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <TextView
         android:text="Notes (optional):"

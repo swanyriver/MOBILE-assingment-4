@@ -1,5 +1,7 @@
 package com.brandonswanson.assignment4;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -321,6 +323,52 @@ public class SnippetViewActivityFragment extends Fragment {
             } else {
                 Snackbar failureNotification = Snackbar
                         .make(mMainview, "Unable to Delete Snippet", Snackbar.LENGTH_LONG);
+                failureNotification.show();
+            }
+        }
+    });
+
+    public NetworkFetcher.APICallFactory createSnippet =
+            new NetworkFetcher.APICallFactory("POST", new NetworkFetcher.NetworkFinish() {
+        @Override
+        public void onNetworkResponse(int responseCode, String responseMsg) {
+            if (responseCode == 201) {
+                // success
+                Snippet snpt = null;
+
+                try {
+                    JSONObject response = new JSONObject(responseMsg);
+                    JSONObject snippet = response.getJSONObject("snippet");
+                    snpt = new Snippet(
+                            snippet.getString("videoID"),
+                            snippet.getString("url"),
+                            snippet.getString("title"),
+                            snippet.isNull("notes") ? null : snippet.getString("notes"),
+                            snippet.getInt("startTime"),
+                            snippet.getInt("endTime"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (snpt == null){
+                    Snackbar failureNotification = Snackbar
+                            .make(mMainview, "Unable to Parse Response from Server", Snackbar.LENGTH_LONG);
+                    failureNotification.show();
+                } else {
+                    Snackbar successNotification = Snackbar
+                            .make(mMainview, "Snippet Created and Added to End of Playlist", Snackbar.LENGTH_LONG);
+                    successNotification.show();
+
+                    mIndex = mSnippets.size();
+                    mSnippets.add(snpt);
+                    loadSnippet();
+                }
+
+            } else {
+                // failure
+                Snackbar failureNotification = Snackbar
+                        .make(mMainview, "Unable to Create Snippet", Snackbar.LENGTH_LONG);
                 failureNotification.show();
             }
         }
