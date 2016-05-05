@@ -23,8 +23,10 @@ public class NetworkFetcher {
     // https://www.udacity.com/course/developing-android-apps--ud853
     // used as starting point
 
-    //todo replace with API factory? mabybe
     public static String fetchJSON(String suburl){
+        return fetchJSON(Constants.API_ROOT, suburl);
+    }
+    public static String fetchJSON(String rootURL, String suburl){
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -35,7 +37,7 @@ public class NetworkFetcher {
 
         try {
             // Construct the URL for the query
-            URL url = new URL( Constants.API_ROOT + suburl);
+            URL url = new URL( rootURL + suburl);
 
             // Create the request to my api, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -46,7 +48,6 @@ public class NetworkFetcher {
             InputStream inputStream = urlConnection.getInputStream();
             StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
-                // Nothing to do.
                 return null;
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -80,7 +81,9 @@ public class NetworkFetcher {
         return JsonStr;
     }
 
-    private static NetworkResponse makeAPICAll(String suburl, String Method, String postContent){
+    // Called with "GET", "POST", "DELETE", or "POST" as method
+    // if method === "POST" postConent is urlEncoded kv string "key=value&key=value" else null
+    private static NetworkResponse makeAPICAll(String suburl, String method, String postContent){
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -95,7 +98,7 @@ public class NetworkFetcher {
 
             // Create the request to my api, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod(Method);
+            urlConnection.setRequestMethod(method);
 
 
             //load package  //todo make post calls
@@ -113,7 +116,6 @@ public class NetworkFetcher {
             InputStream inputStream = urlConnection.getInputStream();
             StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
-                // Nothing to do.
                 return new NetworkResponse(Constants.NO_NETWORK_RESPONSE, "");
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
