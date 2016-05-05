@@ -2,6 +2,7 @@ package com.brandonswanson.assignment4;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -96,9 +98,15 @@ public class NetworkFetcher {
 
 
             //load package  //todo make post calls
-
-
-            urlConnection.connect();
+            if (postContent != null) {
+                byte[] postData = postContent.getBytes();
+                urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                urlConnection.setRequestProperty("Content-Length", String.valueOf(postData.length));
+                urlConnection.setDoOutput(true);
+                urlConnection.getOutputStream().write(postData);
+            } else {
+                urlConnection.connect();
+            }
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
@@ -147,9 +155,9 @@ public class NetworkFetcher {
 
             output.append(prefix);
             prefix = "&";
-            output.append(key);
+            output.append(URLEncoder.encode(key));
             output.append("=");
-            output.append(value);
+            output.append(URLEncoder.encode(value));
         }
 
         return output.toString();
@@ -202,11 +210,14 @@ public class NetworkFetcher {
                 post = urls[1];
             }
 
+            Log.d("Network", "doInBackground: " + post);
+
             return makeAPICAll(url, mMethod, post);
         }
 
         @Override
         protected void onPostExecute(NetworkResponse response) {
+            Log.d("Network", String.format("onPostExecute: %d %s", response.responseCode, response.msg));
             mNetworkListener.onNetworkResponse(response.responseCode, response.msg);
         }
     }

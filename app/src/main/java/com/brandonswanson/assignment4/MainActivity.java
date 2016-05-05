@@ -2,6 +2,7 @@ package com.brandonswanson.assignment4;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -53,10 +54,35 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == ADD_PLAYLIST_ACTIVITY && resultCode == RESULT_OK) {
             //todo make network call from this activity
-            Log.d(TAG, "onActivityResult: " + NetworkFetcher.getHTTPPOST(data.getExtras()));
+            String postParams = NetworkFetcher.getHTTPPOST(data.getExtras());
+            Log.d(TAG, "onActivityResult: " + postParams);
+
+            createPlaylistAPI.execute("/", postParams);
+
         }
 
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private NetworkFetcher.APICallFactory createPlaylistAPI =
+            new NetworkFetcher.APICallFactory("POST", new NetworkFetcher.NetworkFinish() {
+        @Override
+        public void onNetworkResponse(int responseCode, String responseMsg) {
+            if (responseCode == 201){
+                //success
+                Snackbar sucessNotification = Snackbar
+                        .make(findViewById(R.id.mainOuterLayout), "Playlist Created", Snackbar.LENGTH_LONG);
+                sucessNotification.show();
+                MainActivityFragment myFragment = (MainActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.plistFragment);
+                myFragment.refreshPlaylists();
+            } else {
+                //failure
+                Snackbar failureNotification = Snackbar
+                        .make(findViewById(R.id.mainOuterLayout), "Playlist Created", Snackbar.LENGTH_LONG);
+                failureNotification.show();
+            }
+        }
+    });
 }
