@@ -59,4 +59,24 @@ public class MainActivityFragment extends Fragment {
 
         }
     }
+
+    public NetworkFetcher.APICallFactory deletePlaylistAPI =
+            new NetworkFetcher.APICallFactory("DELETE", new NetworkFetcher.NetworkFinish() {
+        @Override
+        public void onNetworkResponse(int responseCode, String responseMsg) {
+            if (responseCode == 202) {
+                //success
+                Snackbar successNotification = Snackbar
+                        .make(layout, "Playlist deleted", Snackbar.LENGTH_LONG);
+                successNotification.show();
+                layout.removeAllViews();
+                new GetAllPlaylists().execute();
+            } else {
+                //failure
+                Snackbar failureNotification = Snackbar
+                        .make(layout, "Unable to delete playlist", Snackbar.LENGTH_LONG);
+                failureNotification.show();
+            }
+        }
+    });
 }

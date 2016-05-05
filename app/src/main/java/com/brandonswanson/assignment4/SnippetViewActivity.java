@@ -1,9 +1,11 @@
 package com.brandonswanson.assignment4;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -42,13 +44,14 @@ public class SnippetViewActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    //todo could be moved to fragment if necessary
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        SnippetViewActivityFragment myFragment = (SnippetViewActivityFragment)
+        final SnippetViewActivityFragment myFragment = (SnippetViewActivityFragment)
                 getSupportFragmentManager().findFragmentById(R.id.snippet_fragment);
 
-        String snippetUrl = myFragment.getSnippetUrl();
+        final String snippetUrl = myFragment.getSnippetUrl();
 
         if (snippetUrl == null && item.getItemId() != R.id.action_autoplay){
             return super.onOptionsItemSelected(item);
@@ -65,7 +68,26 @@ public class SnippetViewActivity extends AppCompatActivity {
                 break;
             case R.id.action_delete_snippet:
                 Log.d(TAG, "onOptionsItemSelected: delete snippet");
-                myFragment.deleteSnippet.execute(snippetUrl);
+
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                alertDialog.setTitle("Delete Snippet");
+                alertDialog.setMessage("Would you like to delete this snippet?");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("DIALOG", "delete snippet: clicked yes");
+                        myFragment.deleteSnippet.execute(snippetUrl);
+                    }
+                });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("DIALOG", "delete snippet: clicked no");
+                        //do nothing
+                    }
+                });
+                alertDialog.show();
+
                 break;
             case R.id.action_edit_snippet:
                 Log.d(TAG, "onOptionsItemSelected: edit snippet");
