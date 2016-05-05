@@ -126,9 +126,19 @@ public class SnippetViewActivityFragment extends Fragment {
         mStopHandler.postDelayed(mStopRunnable, Constants.MILLIS_PER_SECOND);
 
 
-        mURL = getActivity().getIntent().getExtras().getString(Constants.URL_KEY);
+        //recieve entity url from deeplink or intent
+        Intent intent = getActivity().getIntent();
+        if (intent.getAction() == Intent.ACTION_VIEW && intent.getDataString() != null){
+            String url = intent.getDataString();
+            Log.d(TAG, "onCreateView from deeplink: " + url);
+            mURL = url.substring(url.indexOf(".com/") + 4);
+            mURL = mURL.substring(0, mURL.length()-1);
+            mURL += ".json";
+        } else {
+            mURL = intent.getExtras().getString(Constants.URL_KEY);
+        }
 
-        Log.d(TAG, "onCreate: url:" + mURL);
+        Log.d(TAG, "onCreate: json url:" + mURL);
 
         //GET playlist information from http in AsyncTask
         new getPlaylist().execute();

@@ -30,6 +30,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.brandonswanson.assignment4.MainActivity" />
+            <intent-filter android:label="View Playlist">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://API_ROOT/playlist/” -->
+                <data android:scheme="http"
+                    android:host="swansonbassign4.appspot.com"
+                    android:pathPrefix="/playlist/" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".AddPlaylistActivity"
@@ -38,7 +47,7 @@
         <activity
             android:name=".AddEditSnippetActivity"
             android:label="@string/title_activity_add_edit_snippet"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -32,7 +32,15 @@ public class SnippetViewActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        mEntityUrl = getIntent().getExtras().getString("entity_url");
+        Intent intent = getIntent();
+        if (intent.getAction() == Intent.ACTION_VIEW && intent.getDataString() != null){
+            String url = intent.getDataString();
+            Log.d(TAG, "onCreateView from deeplink: " + url);
+            mEntityUrl = url.substring(url.indexOf(".com/") + 4);
+        } else {
+            mEntityUrl = getIntent().getExtras().getString("entity_url");
+        }
+        Log.d(TAG, "onCreate: entityURL" + mEntityUrl);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
