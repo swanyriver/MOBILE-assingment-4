@@ -31,6 +31,7 @@ public class AddEditSnippetActivity extends AppCompatActivity {
     private static final String TAG = "ADD_EDIT_SNIPPET";
     private String mYTVideoID = null;
     private YouTubePlayer mPlayer;
+    private String mUrl = null;
 
     private AlertDialog mDialog;
     private EditText mDialogID_edt;
@@ -52,6 +53,16 @@ public class AddEditSnippetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit_snippet);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mMarkStartButton = (Button) findViewById(R.id.mark_start_time_button);
+        mMarkEndButton = (Button) findViewById(R.id.mark_end_time_button);
+        mTitleEdit = (EditText) findViewById(R.id.snippet_title_edit);
+        mNotesEdit = (EditText) findViewById(R.id.snippet_notes_edit);
+        mStartTimeEdit = (EditText) findViewById(R.id.start_time_edittext);
+        mEndTimeEdit = (EditText) findViewById(R.id.end_time_edittext);
+
+        mMarkStartButton.setOnClickListener(new MarkTime(mStartTimeEdit));
+        mMarkEndButton.setOnClickListener(new MarkTime(mEndTimeEdit));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -75,6 +86,7 @@ public class AddEditSnippetActivity extends AppCompatActivity {
                         resultIntent.putExtra("endTime", mEndTimeEdit.getText().toString());
 
                         if (mNotesEdit.getText().length() > 0) resultIntent.putExtra("notes", mNotesEdit.getText().toString());
+                        if (mUrl != null) resultIntent.putExtra("url", mUrl);
 
                         setResult(Activity.RESULT_OK, resultIntent);
                         Log.d(TAG, "onClick: finishing add activity with extras");
@@ -86,14 +98,27 @@ public class AddEditSnippetActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         String url = (extras != null) ? extras.getString("url") : null;
-        if (url != null){
-            // edit
-            // todo should i add the whole snippet as extra or pull from url
-            //mYTVideoID =
+        if (url != null && extras.getString("VideoID") != null){
+            // edit snippet
+            mUrl = url;
+            String title = extras.getString("title");
+            String notes = extras.getString("notes");
+            mYTVideoID = extras.getString("VideoID");
+            String startTime = extras.getString("startTime");
+            String endTime = extras.getString("endTime");
+
             // load video
             loadVideo();
+
             // populate fields
-            // todo populate fields
+            if(title != null) mTitleEdit.setText(title);
+            if(notes != null) mNotesEdit.setText(notes);
+            if(startTime != null) mStartTimeEdit.setText(startTime);
+            if(endTime != null) mEndTimeEdit.setText(endTime);
+
+            fab.setImageDrawable(getDrawable(R.drawable.ic_mode_edit_white_48dp));
+
+
         } else {
 
             //pick youtube ID
@@ -140,16 +165,6 @@ public class AddEditSnippetActivity extends AppCompatActivity {
                 failureNotification.show();
             }
         });
-
-        mMarkStartButton = (Button) findViewById(R.id.mark_start_time_button);
-        mMarkEndButton = (Button) findViewById(R.id.mark_end_time_button);
-        mTitleEdit = (EditText) findViewById(R.id.snippet_title_edit);
-        mNotesEdit = (EditText) findViewById(R.id.snippet_notes_edit);
-        mStartTimeEdit = (EditText) findViewById(R.id.start_time_edittext);
-        mEndTimeEdit = (EditText) findViewById(R.id.end_time_edittext);
-
-        mMarkStartButton.setOnClickListener(new MarkTime(mStartTimeEdit));
-        mMarkEndButton.setOnClickListener(new MarkTime(mEndTimeEdit));
 
     }
 

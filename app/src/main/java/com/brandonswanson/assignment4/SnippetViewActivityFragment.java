@@ -282,6 +282,18 @@ public class SnippetViewActivityFragment extends Fragment {
         }
     }
 
+    public Bundle getSerializedSnippet(){
+        Bundle output = new Bundle();
+        Snippet snpt = mSnippets.get(mIndex);
+        output.putString("VideoID", snpt.videoID);
+        output.putString("url", snpt.url);
+        output.putString("title", snpt.title);
+        output.putString("startTime", "" +snpt.startTime);
+        output.putString("endTime", "" + snpt.endTime);
+        if (snpt.notes != null) output.putString("notes", snpt.notes);
+        return output;
+    }
+
     class myGuestureDetect extends GestureDetector.SimpleOnGestureListener {
         private static final int SWIPE_THRESHOLD = 2000;
 
@@ -374,5 +386,11 @@ public class SnippetViewActivityFragment extends Fragment {
         }
     });
 
+    @Override
+    public void onResume() {
 
+        loadSnippet();
+
+        super.onResume();
+    }
 }

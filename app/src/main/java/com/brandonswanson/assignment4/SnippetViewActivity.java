@@ -101,7 +101,7 @@ public class SnippetViewActivity extends AppCompatActivity {
             case R.id.action_edit_snippet:
                 Log.d(TAG, "onOptionsItemSelected: edit snippet");
                 Intent editIntent = new Intent(this, AddEditSnippetActivity.class);
-                editIntent.putExtra("url", snippetUrl);
+                editIntent.putExtras(mFragment.getSerializedSnippet());
                 startActivityForResult(editIntent, EDIT_SNIPPET_ACTIVITY);
                 break;
         }
@@ -114,7 +114,10 @@ public class SnippetViewActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: " + requestCode);
 
-        if (resultCode != Activity.RESULT_OK) return;
+        if (resultCode != Activity.RESULT_OK){
+            Log.d(TAG, "onActivityResult: " + resultCode);
+            return;
+        }
 
         if (requestCode == CREATE_SNIPPET_ACTIVITY){
             mFragment.createSnippet.execute(mEntityUrl, NetworkFetcher.getHTTPPOST(data.getExtras()));
