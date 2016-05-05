@@ -69,8 +69,7 @@ public class MainActivityFragment extends Fragment {
                 Snackbar successNotification = Snackbar
                         .make(layout, "Playlist deleted", Snackbar.LENGTH_LONG);
                 successNotification.show();
-                layout.removeAllViews();
-                new GetAllPlaylists().execute();
+                refreshPlaylists();
             } else {
                 //failure
                 Snackbar failureNotification = Snackbar
@@ -79,4 +78,9 @@ public class MainActivityFragment extends Fragment {
             }
         }
     });
+
+    public void refreshPlaylists(){
+        layout.removeAllViews();
+        new GetAllPlaylists().execute();
+    }
 }
