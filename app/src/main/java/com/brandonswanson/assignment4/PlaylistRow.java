@@ -36,7 +36,9 @@ public class PlaylistRow extends LinearLayout implements View.OnClickListener, V
         setOnClickListener(this);
         setOnLongClickListener(this);
 
-        ((TextView) findViewById(R.id.plistText)).setText(mPlaylistPreview.Title + mPlaylistPreview.Creator);
+        //todo make playlist row more attractive
+        //todo create enough test data that it is scrollable
+        ((TextView) findViewById(R.id.plistText)).setText(mPlaylistPreview.Title + "  by  " + mPlaylistPreview.Creator);
 
     }
 
