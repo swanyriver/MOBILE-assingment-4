@@ -81,7 +81,6 @@ public class AddEditSnippetActivity extends AppCompatActivity {
                         resultIntent.putExtra("title",mTitleEdit.getText().toString());
                         resultIntent.putExtra("videoID", mYTVideoID);
 
-                        // todo these should be fine a strings, might want to parseInt though
                         resultIntent.putExtra("startTime", mStartTimeEdit.getText().toString());
                         resultIntent.putExtra("endTime", mEndTimeEdit.getText().toString());
 

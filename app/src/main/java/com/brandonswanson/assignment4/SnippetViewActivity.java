@@ -62,7 +62,6 @@ public class SnippetViewActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    //todo could be moved to fragment if necessary
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 

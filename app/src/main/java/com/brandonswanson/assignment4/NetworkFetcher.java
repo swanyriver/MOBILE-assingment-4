@@ -100,8 +100,7 @@ public class NetworkFetcher {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod(method);
 
-
-            //load package  //todo make post calls
+            //load package
             if (postContent != null) {
                 byte[] postData = postContent.getBytes();
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

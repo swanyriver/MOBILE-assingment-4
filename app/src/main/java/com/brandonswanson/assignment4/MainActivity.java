@@ -59,12 +59,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == ADD_PLAYLIST_ACTIVITY && resultCode == RESULT_OK) {
-            //todo make network call from this activity
             String postParams = NetworkFetcher.getHTTPPOST(data.getExtras());
             Log.d(TAG, "onActivityResult: " + postParams);
-
             createPlaylistAPI.execute("/", postParams);
-
         }
 
 
