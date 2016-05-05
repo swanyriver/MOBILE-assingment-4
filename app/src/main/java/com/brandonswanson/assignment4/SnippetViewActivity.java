@@ -122,7 +122,10 @@ public class SnippetViewActivity extends AppCompatActivity {
         if (requestCode == CREATE_SNIPPET_ACTIVITY){
             mFragment.createSnippet.execute(mEntityUrl, NetworkFetcher.getHTTPPOST(data.getExtras()));
         } else if (requestCode == EDIT_SNIPPET_ACTIVITY){
-
+            Bundle extras = data.getExtras();
+            String url = extras.getString("url");
+            extras.remove("url");
+            mFragment.editSnippet.execute(url, NetworkFetcher.getHTTPPOST(extras));
         }
 
     }

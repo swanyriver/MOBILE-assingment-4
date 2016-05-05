@@ -386,6 +386,52 @@ public class SnippetViewActivityFragment extends Fragment {
         }
     });
 
+    public NetworkFetcher.APICallFactory editSnippet =
+        new NetworkFetcher.APICallFactory("PUT", new NetworkFetcher.NetworkFinish() {
+            @Override
+            public void onNetworkResponse(int responseCode, String responseMsg) {
+                if (responseCode == 200) {
+                    // success
+                    Snippet snpt = null;
+
+                    try {
+                        JSONObject response = new JSONObject(responseMsg);
+                        String url = response.getString("url");
+                        JSONObject snippet = response.getJSONObject("snippet");
+                        snpt = new Snippet(
+                                snippet.getString("videoID"),
+                                url,
+                                snippet.getString("title"),
+                                snippet.isNull("notes") ? null : snippet.getString("notes"),
+                                snippet.getInt("startTime"),
+                                snippet.getInt("endTime"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (snpt == null){
+                        Snackbar failureNotification = Snackbar
+                                .make(mMainview, "Unable to Parse Response from Server", Snackbar.LENGTH_LONG);
+                        failureNotification.show();
+                    } else {
+                        Snackbar successNotification = Snackbar
+                                .make(mMainview, "Snippet Updated", Snackbar.LENGTH_LONG);
+                        successNotification.show();
+
+                        mSnippets.set(mIndex, snpt);
+                        loadSnippet();
+                    }
+
+                } else {
+                    // failure
+                    Snackbar failureNotification = Snackbar
+                            .make(mMainview, "Unable to Update Snippet", Snackbar.LENGTH_LONG);
+                    failureNotification.show();
+                }
+            }
+    });
+
     @Override
     public void onResume() {
 
