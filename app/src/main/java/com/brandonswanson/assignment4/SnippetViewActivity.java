@@ -67,7 +67,7 @@ public class SnippetViewActivity extends AppCompatActivity {
 
         final String snippetUrl = mFragment.getSnippetUrl();
 
-        if (snippetUrl == null && item.getItemId() != R.id.action_autoplay){
+        if (snippetUrl == null && item.getItemId() != R.id.action_autoplay && item.getItemId() != R.id.action_add_snippet){
             return super.onOptionsItemSelected(item);
         }
 

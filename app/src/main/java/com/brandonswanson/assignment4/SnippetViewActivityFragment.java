@@ -383,6 +383,10 @@ public class SnippetViewActivityFragment extends Fragment {
                             .make(mMainview, "Snippet Created and Added to End of Playlist", Snackbar.LENGTH_LONG);
                     successNotification.show();
 
+                    if (mSnippets == null){
+                        mSnippets = new ArrayList<>();
+                    }
+
                     mIndex = mSnippets.size();
                     mSnippets.add(snpt);
                     loadSnippet();
