@@ -8,11 +8,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Map;
 
 /**
  * Created by brandon on 5/2/16.
@@ -21,7 +19,9 @@ public class NetworkFetcher {
 
     // Boiler plate networking code with exception handling from
     // https://www.udacity.com/course/developing-android-apps--ud853
-    // used as starting point
+
+    // used as starting point and expanded to included POST, PUT, and DELETE request
+    // as well as returning an object with both response code and response string by Brandon Swanson
 
     public static String fetchJSON(String suburl){
         return fetchJSON(Constants.API_ROOT, suburl);
@@ -82,7 +82,7 @@ public class NetworkFetcher {
     }
 
     // Called with "GET", "POST", "DELETE", or "POST" as method
-    // if method === "POST" postConent is urlEncoded kv string "key=value&key=value" else null
+    // if method === "POST" postContent is urlEncoded kv string "key=value&key=value" else null
     private static NetworkResponse makeAPICAll(String suburl, String method, String postContent){
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -100,7 +100,7 @@ public class NetworkFetcher {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod(method);
 
-            //load package
+            //load POST contents
             if (postContent != null) {
                 byte[] postData = postContent.getBytes();
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -147,6 +147,7 @@ public class NetworkFetcher {
 
     }
 
+    // create URL formatted data key=value string from activity intent bundle
     public static String getHTTPPOST(Bundle extras){
 
         StringBuilder output = new StringBuilder();
@@ -204,6 +205,7 @@ public class NetworkFetcher {
         }
 
         @Override
+        // Receive SubURL and optional POST/PUT data string for making network call
         protected NetworkResponse doInBackground(String... urls) {
             String url = urls[0];
             String post = null;
