@@ -27,8 +27,7 @@ public class NetworkFetcher {
         return fetchJSON(Constants.API_ROOT, suburl);
     }
     public static String fetchJSON(String rootURL, String suburl){
-        // These two need to be declared outside the try/catch
-        // so that they can be closed in the finally block.
+
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
@@ -84,8 +83,7 @@ public class NetworkFetcher {
     // Called with "GET", "POST", "DELETE", or "POST" as method
     // if method === "POST" postContent is urlEncoded kv string "key=value&key=value" else null
     private static NetworkResponse makeAPICAll(String suburl, String method, String postContent){
-        // These two need to be declared outside the try/catch
-        // so that they can be closed in the finally block.
+
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
