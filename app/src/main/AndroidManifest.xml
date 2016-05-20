@@ -19,12 +19,12 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
 
-                <action android:name="android.intent.action.VIEW" />
+               <!-- <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "http://API_ROOT/playlist/” -->
+                &lt;!&ndash; Accepts URIs that begin with "http://API_ROOT/playlist/” &ndash;&gt;
                 <data android:scheme="http"
-                    android:host="swansonbassign4.appspot.com" />
+                    android:host="swansonbassign4.appspot.com" />-->
 
             </intent-filter>
         </activity>

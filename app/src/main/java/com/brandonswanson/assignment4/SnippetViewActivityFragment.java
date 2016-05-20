@@ -240,58 +240,58 @@ public class SnippetViewActivityFragment extends Fragment {
         }
     }
 
-    private static class Snippet {
-        public final String videoID;
-        public final String url;
-        public final String title;
-        public final String notes;
-        public final int startTime;
-        public final int endTime;
+private static class Snippet {
+    public final String videoID;
+    public final String url;
+    public final String title;
+    public final String notes;
+    public final int startTime;
+    public final int endTime;
 
-        public Snippet(String videoID, String url, String title, String notes, int startTime, int endTime) {
-            this.videoID = videoID;
-            this.url = url;
-            this.title = title;
-            this.notes = notes;
-            this.startTime = startTime;
-            this.endTime = endTime;
-        }
+    public Snippet(String videoID, String url, String title, String notes, int startTime, int endTime) {
+        this.videoID = videoID;
+        this.url = url;
+        this.title = title;
+        this.notes = notes;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
-        @Override
-        public String toString() {
-            return "Title:" + title + " ID:" + videoID + " times:" + startTime + "-" + endTime;
-        }
+    @Override
+    public String toString() {
+        return "Title:" + title + " ID:" + videoID + " times:" + startTime + "-" + endTime;
+    }
 
-        static public ArrayList<Snippet> snippetFactory(String JSONplaylist){
-            ArrayList<Snippet> playlistList = new ArrayList<Snippet>();
-            try {
-                JSONObject playlist = new JSONObject(JSONplaylist);
-                JSONArray snippets = playlist.getJSONArray("snippets");
-                for(int n = 0; n < snippets.length(); n++)
-                {
-                    try {
-                        JSONObject snippet = snippets.getJSONObject(n);
-                        playlistList.add(new Snippet(
-                                snippet.getString("videoID"),
-                                snippet.getString("url"),
-                                snippet.getString("title"),
-                                snippet.isNull("notes") ? null : snippet.getString("notes"),
-                                snippet.getInt("startTime"),
-                                snippet.getInt("endTime")
-                        ));
+    static public ArrayList<Snippet> snippetFactory(String JSONplaylist){
+        ArrayList<Snippet> playlistList = new ArrayList<Snippet>();
+        try {
+            JSONObject playlist = new JSONObject(JSONplaylist);
+            JSONArray snippets = playlist.getJSONArray("snippets");
+            for(int n = 0; n < snippets.length(); n++)
+            {
+                try {
+                    JSONObject snippet = snippets.getJSONObject(n);
+                    playlistList.add(new Snippet(
+                            snippet.getString("videoID"),
+                            snippet.getString("url"),
+                            snippet.getString("title"),
+                            snippet.isNull("notes") ? null : snippet.getString("notes"),
+                            snippet.getInt("startTime"),
+                            snippet.getInt("endTime")
+                    ));
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
 
-            return playlistList.isEmpty() ? null : playlistList;
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        return playlistList.isEmpty() ? null : playlistList;
     }
+}
 
     public Bundle getSerializedSnippet(){
         Bundle output = new Bundle();
