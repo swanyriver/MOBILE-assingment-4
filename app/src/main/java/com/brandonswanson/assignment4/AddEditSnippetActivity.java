@@ -96,24 +96,19 @@ public class AddEditSnippetActivity extends AppCompatActivity {
         }
 
         Bundle extras = getIntent().getExtras();
-        String url = (extras != null) ? extras.getString("url") : null;
-        if (url != null && extras.getString("VideoID") != null){
-            // edit snippet
-            mUrl = url;
-            String title = extras.getString("title");
-            String notes = extras.getString("notes");
-            mYTVideoID = extras.getString("VideoID");
-            String startTime = extras.getString("startTime");
-            String endTime = extras.getString("endTime");
+        if (extras.containsKey("Snippet")){
+            SnippetViewActivityFragment.Snippet snippet =
+                    (SnippetViewActivityFragment.Snippet) extras.getSerializable("Snippet");
 
             // load video
+            mYTVideoID = snippet.videoID;
             loadVideo();
 
             // populate fields
-            if(title != null) mTitleEdit.setText(title);
-            if(notes != null) mNotesEdit.setText(notes);
-            if(startTime != null) mStartTimeEdit.setText(startTime);
-            if(endTime != null) mEndTimeEdit.setText(endTime);
+            mTitleEdit.setText(snippet.title);
+            mStartTimeEdit.setText(Integer.toString(snippet.startTime));
+            mEndTimeEdit.setText(Integer.toString(snippet.endTime));
+            if(snippet.notes != null) mNotesEdit.setText(snippet.notes);
 
             fab.setImageDrawable(getDrawable(R.drawable.ic_mode_edit_white_48dp));
 

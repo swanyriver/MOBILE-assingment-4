@@ -24,12 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import android.os.Handler;
@@ -247,7 +241,7 @@ public class SnippetViewActivityFragment extends Fragment {
         }
     }
 
-private static class Snippet implements Serializable{
+public static class Snippet implements Serializable{
     public final String videoID;
     public final String url;
     public final String title;
@@ -300,30 +294,8 @@ private static class Snippet implements Serializable{
     }
 }
 
-    public Bundle getSerializedSnippet(){
-
-/*        ByteArrayOutputStream outString = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream objOut = new ObjectOutputStream(outString);
-            objOut.writeObject(mSnippets.get(mIndex));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-
-        Bundle output = new Bundle();
-        Snippet snpt = mSnippets.get(mIndex);
-
-        /*output.putSerializable("snippet", snpt);
-        snpt = (Snippet) output.getSerializable("snippet");*/
-
-        output.putString("VideoID", snpt.videoID);
-        output.putString("url", snpt.url);
-        output.putString("title", snpt.title);
-        output.putString("startTime", "" +snpt.startTime);
-        output.putString("endTime", "" + snpt.endTime);
-        if (snpt.notes != null) output.putString("notes", snpt.notes);
-        return output;
+    public Serializable getCurrentSnippet(){
+        return mSnippets.get(mIndex);
     }
 
     class myGuestureDetect extends GestureDetector.SimpleOnGestureListener {

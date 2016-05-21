@@ -108,7 +108,7 @@ public class SnippetViewActivity extends AppCompatActivity {
             case R.id.action_edit_snippet:
                 Log.d(TAG, "onOptionsItemSelected: edit snippet");
                 Intent editIntent = new Intent(this, AddEditSnippetActivity.class);
-                editIntent.putExtras(mFragment.getSerializedSnippet());
+                editIntent.putExtra("Snippet", mFragment.getCurrentSnippet());
                 startActivityForResult(editIntent, EDIT_SNIPPET_ACTIVITY);
                 break;
 
