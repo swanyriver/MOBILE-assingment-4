@@ -12,6 +12,23 @@ public class finalProjectApplication extends Application {
     private int mID = 0;
     private String mTokenStr = null;
     private String mUserName = null;
+    private static finalProjectApplication sInstance = null;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sInstance = this;
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        sInstance = null;
+    }
+
+    static finalProjectApplication getsInstance(){
+        return sInstance;
+    }
 
     public void setUser(String name, int id, String token){
         mID = id;

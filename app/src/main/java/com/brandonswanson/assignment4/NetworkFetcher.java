@@ -1,5 +1,6 @@
 package com.brandonswanson.assignment4;
 
+import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -97,6 +98,9 @@ public class NetworkFetcher {
             // Create the request to my api, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod(method);
+
+            //todo this needs to be null checked
+            finalProjectApplication.getsInstance().addAuthenticationToCall(urlConnection);
 
             //load POST contents
             if (postContent != null) {
