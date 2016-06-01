@@ -54,6 +54,10 @@ public class PlaylistRow extends LinearLayout implements View.OnClickListener, V
     public boolean onLongClick(View v) {
         //show popup, delete playlist
 
+        if (!Credentials.getsInstance().belongsToLoggedInUser(mPlaylistPreview.Creator)){
+            return false;
+        }
+
         Log.d("playlistRow", "onLongClick: " + mPlaylistPreview.Title);
 
         AlertDialog alertDialog = new AlertDialog.Builder(mFragment.getContext()).create();

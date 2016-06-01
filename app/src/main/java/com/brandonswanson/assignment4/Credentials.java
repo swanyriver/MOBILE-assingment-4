@@ -38,12 +38,13 @@ public class Credentials extends Application {
     public void logOutUser(){
         mIDstr = null;
         mTokenStr = null;
-        mTokenStr = null;
+        mUserName = null;
         Log.d(TAG, "logOutUser");
     }
 
-    public String getUserName(){
-        return mUserName;
+    public boolean belongsToLoggedInUser(String name){
+        Log.d(TAG, "belongsTologgedInUser: " + name + "==" + mUserName + ":" + (name == mUserName));
+        return this.isUserLoggedIn() && name.equals(mUserName);
     }
 
     public boolean isUserLoggedIn(){
