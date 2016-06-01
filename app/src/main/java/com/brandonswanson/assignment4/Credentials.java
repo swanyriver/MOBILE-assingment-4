@@ -8,28 +8,23 @@ import java.net.HttpURLConnection;
 /**
  * Created by brandon on 5/31/16.
  */
-public class FinalProjectApplication extends Application {
+public class Credentials extends Application {
 
     private String mIDstr = null;
     private String mTokenStr = null;
     private String mUserName = null;
-    private static FinalProjectApplication sInstance = null;
+    private static Credentials sInstance = null;
     
-    private static String TAG = "APPLICATION";
+    private static String TAG = "CREDENTIALS";
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sInstance = this;
+    private Credentials(){
+
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        sInstance = null;
-    }
-
-    static FinalProjectApplication getsInstance(){
+    public static Credentials getsInstance(){
+        if (sInstance == null){
+            sInstance = new Credentials();
+        }
         return sInstance;
     }
 

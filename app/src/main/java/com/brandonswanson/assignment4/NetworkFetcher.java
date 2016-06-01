@@ -42,8 +42,7 @@ public class NetworkFetcher {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
 
-            //todo this needs to be null checked
-            FinalProjectApplication.getsInstance().addAuthenticationToCall(urlConnection);
+            Credentials.getsInstance().addAuthenticationToCall(urlConnection);
 
             urlConnection.connect();
 
@@ -102,8 +101,7 @@ public class NetworkFetcher {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod(method);
 
-            //todo this needs to be null checked
-            FinalProjectApplication.getsInstance().addAuthenticationToCall(urlConnection);
+            Credentials.getsInstance().addAuthenticationToCall(urlConnection);
 
             //load POST contents
             if (postContent != null) {
