@@ -46,6 +46,7 @@ public class MainActivityFragment extends Fragment {
             if (s == null){
                 failureNotification.show();
             } else {
+                layout.removeAllViews();
                 for (PlaylistRow.PlaylistPreview plist:
                         PlaylistRow.PlaylistPreview.PlaylistPreviewFactory(s)) {
                     layout.addView(new PlaylistRow(layout.getContext(), plist, MainActivityFragment.this));
@@ -80,7 +81,6 @@ public class MainActivityFragment extends Fragment {
     });
 
     public void refreshPlaylists(){
-        layout.removeAllViews();
         new GetAllPlaylists().execute();
     }
 }
