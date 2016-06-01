@@ -1,6 +1,5 @@
 package com.brandonswanson.assignment4;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +14,7 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
     private static final int ADD_PLAYLIST_ACTIVITY = 100;
+    private static final int LOG_IN_REQUEST = 101;
     private static final String TAG = "MAIN Activity";
 
     @Override
@@ -30,14 +30,22 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //launch register log in/ log out activity
-
+                    Intent launchLoginIntent = new Intent(getApplicationContext(),
+                            LoginActivity.class);
+                    startActivityForResult(launchLoginIntent, LOG_IN_REQUEST);
                 }
             });
         }
 
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivityFragment myFragment = (MainActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.plistFragment);
+        myFragment.refreshPlaylists();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,9 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -63,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, Constants.API_ROOT);
             sendIntent.setType("text/plain");
-            startActivity(Intent.createChooser(sendIntent, "Share This this with others"));
+            startActivity(Intent.createChooser(sendIntent, "Share this with others"));
         }
 
         return super.onOptionsItemSelected(item);
@@ -76,6 +81,17 @@ public class MainActivity extends AppCompatActivity {
             String postParams = NetworkFetcher.getHTTPPOST(data.getExtras());
             Log.d(TAG, "onActivityResult: " + postParams);
             createPlaylistAPI.execute("/", postParams);
+        } else if (requestCode == LOG_IN_REQUEST) {
+            Bundle extras = data.getExtras();
+            String msg = null;
+            if (extras != null){
+                msg = extras.getString("msg");
+            }
+            if (msg != null) {
+                Snackbar resultNotification = Snackbar
+                        .make(findViewById(R.id.mainOuterLayout), msg, Snackbar.LENGTH_LONG);
+                resultNotification.show();
+            }
         }
 
 

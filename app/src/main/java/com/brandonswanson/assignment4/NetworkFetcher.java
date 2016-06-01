@@ -96,6 +96,7 @@ public class NetworkFetcher {
         try {
             // Construct the URL for the query
             URL url = new URL( Constants.API_ROOT + suburl);
+            Log.d("NETWORK", "makeAPICAll: " + url.toString());
 
             // Create the request to my api, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -115,7 +116,11 @@ public class NetworkFetcher {
             }
 
             // Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
+            int statusCode = urlConnection.getResponseCode();
+            InputStream inputStream = (statusCode == 400 || statusCode == 401)
+                    ? urlConnection.getErrorStream()
+                    : urlConnection.getInputStream();
+
             StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 return new NetworkResponse(Constants.NO_NETWORK_RESPONSE, "");
@@ -129,7 +134,7 @@ public class NetworkFetcher {
             }
 
             result = buffer.toString();
-            return new NetworkResponse(urlConnection.getResponseCode(), result);
+            return new NetworkResponse(statusCode, result);
 
 
         } catch (IOException e) {
@@ -217,7 +222,7 @@ public class NetworkFetcher {
                 post = urls[1];
             }
 
-            Log.d("Network", "doInBackground: " + post);
+            Log.d("Network", "doInBackground post params:" + post);
 
             return makeAPICAll(url, mMethod, post);
         }

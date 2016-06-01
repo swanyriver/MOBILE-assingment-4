@@ -42,6 +42,10 @@ public class Credentials extends Application {
         Log.d(TAG, "logOutUser");
     }
 
+    public String userName(){
+        return mUserName;
+    }
+
     public boolean belongsToLoggedInUser(String name){
         Log.d(TAG, "belongsTologgedInUser: " + name + "==" + mUserName + ":" + (name == mUserName));
         return this.isUserLoggedIn() && name.equals(mUserName);
