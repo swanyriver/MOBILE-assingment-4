@@ -32,7 +32,7 @@ public class Credentials extends Application {
         mIDstr = id;
         mTokenStr = token;
         mUserName = name;
-        Log.d(TAG, "logInUser: id" + id + " token:" + token);
+        Log.d(TAG, "logInUser: id:" + id + " token:" + token);
     }
 
     public void logOutUser(){

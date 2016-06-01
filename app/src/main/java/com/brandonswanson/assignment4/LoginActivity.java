@@ -48,15 +48,18 @@ public class LoginActivity extends AppCompatActivity {
                 "&password=" + mPasswordEdit.getText().toString();
     }
 
-    //todo progress indication disable buttons
     public void signInButton(View view) {
-        loginAPI.execute("/login", getPostParams());
+        makeCallToServer("/login");
     }
 
-    //todo progress indication disable buttons
-    //todo merge these to one function with different url string params
     public void registerButton(View view) {
-        loginAPI.execute("/register", getPostParams());
+        makeCallToServer("/register");
+    }
+
+    public void makeCallToServer(String url){
+        //todo progress indication disable buttons, layout disable doesnt visbly work
+        mLoginLayout.setEnabled(false);
+        loginAPI.execute(url, getPostParams());
     }
 
 
@@ -73,6 +76,9 @@ public class LoginActivity extends AppCompatActivity {
 
             Log.d("LOGIN", "onNetworkResponse: code:" + responseCode);
             Log.d("LOGIN", "onNetworkResponse: json:" + responseMsg);
+
+            //todo undo progress indicator and ui disable
+            mLoginLayout.setEnabled(true);
 
             if (responseCode == -1) {
                 makeSnack("Unable to connect to server");
@@ -112,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     });
 
-    //todo make visible with keyboard up,  maybe just toast
     private void makeSnack(String msg){
         Snackbar failureNotification = Snackbar
                 .make(mMainLayout, msg, Snackbar.LENGTH_LONG);

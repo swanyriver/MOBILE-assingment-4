@@ -61,7 +61,8 @@
             android:name=".AddEditSnippetActivity"
             android:label="@string/title_activity_add_edit_snippet"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
     </application>
 
 </manifest>

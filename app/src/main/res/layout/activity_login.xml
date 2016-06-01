@@ -9,6 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:id="@+id/login_main_layout"
+    android:windowSoftInputMode="adjustResize"
     tools:context=".LoginActivity">
 
     <LinearLayout
@@ -19,7 +20,6 @@
 
         <TextView
             android:text="Name:"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -30,7 +30,7 @@
 
         <TextView
             android:text="Password:"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

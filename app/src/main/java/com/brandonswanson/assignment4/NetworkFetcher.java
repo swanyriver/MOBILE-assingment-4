@@ -44,6 +44,8 @@ public class NetworkFetcher {
 
             Credentials.getsInstance().addAuthenticationToCall(urlConnection);
 
+            Log.d("NETWORK", "fetchJSON: " + urlConnection.toString());
+
             urlConnection.connect();
 
             // Read the input stream into a String

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             String postParams = NetworkFetcher.getHTTPPOST(data.getExtras());
             Log.d(TAG, "onActivityResult: " + postParams);
             createPlaylistAPI.execute("/", postParams);
-        } else if (requestCode == LOG_IN_REQUEST) {
+        } else if (requestCode == LOG_IN_REQUEST && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             String msg = null;
             if (extras != null){
