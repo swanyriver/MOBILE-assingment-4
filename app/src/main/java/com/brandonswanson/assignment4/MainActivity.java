@@ -10,12 +10,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int ADD_PLAYLIST_ACTIVITY = 100;
     private static final int LOG_IN_REQUEST = 101;
     private static final String TAG = "MAIN Activity";
+    private Button mPublicPlaylistButton;
+    private Button mUserPlaylistButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        mPublicPlaylistButton = (Button) findViewById(R.id.public_playlist_button);
+        mUserPlaylistButton = (Button) findViewById(R.id.user_playlist_button);
     }
 
     @Override
@@ -118,4 +123,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     });
+
+    public void onTabButton(View button) {
+        mUserPlaylistButton.setEnabled(button == mPublicPlaylistButton);
+        mPublicPlaylistButton.setEnabled(button == mUserPlaylistButton);
+        if (button == mPublicPlaylistButton){
+            Log.d(TAG, "onTabButton: switching to PUBLIC playlists");
+        } else {
+            Log.d(TAG, "onTabButton: switching to USER playlists");
+        }
+    }
 }
