@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int ADD_PLAYLIST_ACTIVITY = 100;
     private static final int LOG_IN_REQUEST = 101;
+    private static final int LOG_IN_TO_ADD_REQUEST = 102;
     private static final String TAG = "MAIN Activity";
     private Button mPublicPlaylistButton;
     private Button mUserPlaylistButton;
@@ -27,6 +30,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final LayoutInflater inflater = getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final View dialogView = inflater.inflate(R.layout.sign_in_pop_up, null);
+        builder.setView(dialogView);
+        final AlertDialog dialog = builder.create();
+        dialogView.findViewById(R.id.pop_up_sign_in_button)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        launchLogin(LOG_IN_TO_ADD_REQUEST);
+                        dialog.dismiss();
+                    }
+                });
+
         //Add Playlist FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -34,12 +51,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (Credentials.getsInstance().isUserLoggedIn()){
-                        Intent intent = new Intent(getApplicationContext(),
-                                AddPlaylistActivity.class);
-                        startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
+                        startAddPlaylistActivity();
                     } else {
-                        //todo pop up window for sign in
-                        //todo maybe go straight to add playlist after, using another request code
+                        dialog.show();
                     }
                 }
             });
@@ -47,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
         mPublicPlaylistButton = (Button) findViewById(R.id.public_playlist_button);
         mUserPlaylistButton = (Button) findViewById(R.id.user_playlist_button);
+    }
+
+    private void startAddPlaylistActivity() {
+        Intent intent = new Intent(getApplicationContext(),
+                AddPlaylistActivity.class);
+        startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
     }
 
     @Override
@@ -69,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            launchLogin(null);
+            launchLogin(LOG_IN_REQUEST);
         } else if (id == R.id.action_share_main) {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
@@ -88,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
             String postParams = NetworkFetcher.getHTTPPOST(data.getExtras());
             Log.d(TAG, "onActivityResult: " + postParams);
             createPlaylistAPI.execute("/", postParams);
-        } else if (requestCode == LOG_IN_REQUEST && resultCode == RESULT_OK) {
+        } else if ((requestCode == LOG_IN_REQUEST || requestCode == LOG_IN_TO_ADD_REQUEST )
+                && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             String msg = null;
             if (extras != null){
@@ -99,17 +120,22 @@ public class MainActivity extends AppCompatActivity {
                         .make(findViewById(R.id.mainOuterLayout), msg, Snackbar.LENGTH_LONG);
                 resultNotification.show();
             }
+
+            if (requestCode == LOG_IN_TO_ADD_REQUEST) {
+                startAddPlaylistActivity();
+            }
+
         }
 
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void launchLogin(View view){
+    public void launchLogin(int RequestCode){
         //launch register log in/ log out activity
         Intent launchLoginIntent = new Intent(getApplicationContext(),
                 LoginActivity.class);
-        startActivityForResult(launchLoginIntent, LOG_IN_REQUEST);
+        startActivityForResult(launchLoginIntent, RequestCode);
     }
 
     private NetworkFetcher.APICallFactory createPlaylistAPI =

@@ -57,12 +57,15 @@
             android:name=".AddPlaylistActivity"
             android:label="@string/title_activity_add_playlist"
             android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddEditSnippetActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_add_edit_snippet"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:label="User Account"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
     </application>
