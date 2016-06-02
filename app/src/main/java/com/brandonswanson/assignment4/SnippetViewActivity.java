@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 public class SnippetViewActivity extends AppCompatActivity {
 
@@ -43,6 +45,19 @@ public class SnippetViewActivity extends AppCompatActivity {
 
         mFragment = (SnippetViewActivityFragment)
                 getSupportFragmentManager().findFragmentById(R.id.snippet_fragment);
+
+        //Add Playlist FAB
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "FAB: add snippet");
+                    Intent intent = new Intent(getApplicationContext(), AddEditSnippetActivity.class);
+                    startActivityForResult(intent, CREATE_SNIPPET_ACTIVITY);
+                }
+            });
+        }
     }
 
     public void setTitle(String title){
@@ -64,7 +79,7 @@ public class SnippetViewActivity extends AppCompatActivity {
 
         final String snippetUrl = mFragment.getSnippetUrl();
 
-        if (snippetUrl == null && item.getItemId() != R.id.action_autoplay && item.getItemId() != R.id.action_add_snippet){
+        if (snippetUrl == null && item.getItemId() != R.id.action_autoplay){
             return super.onOptionsItemSelected(item);
         }
 
@@ -73,11 +88,6 @@ public class SnippetViewActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_autoplay:
                 item.setChecked(!item.isChecked());
-                break;
-            case R.id.action_add_snippet:
-                Log.d(TAG, "onOptionsItemSelected: add snippet");
-                Intent intent = new Intent(this, AddEditSnippetActivity.class);
-                startActivityForResult(intent, CREATE_SNIPPET_ACTIVITY);
                 break;
             case R.id.action_delete_snippet:
                 Log.d(TAG, "onOptionsItemSelected: delete snippet");

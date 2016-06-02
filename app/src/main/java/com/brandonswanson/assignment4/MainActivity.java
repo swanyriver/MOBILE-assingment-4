@@ -27,15 +27,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Add Playlist FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //launch register log in/ log out activity
-                    Intent launchLoginIntent = new Intent(getApplicationContext(),
-                            LoginActivity.class);
-                    startActivityForResult(launchLoginIntent, LOG_IN_REQUEST);
+                    Intent intent = new Intent(getApplicationContext(), AddPlaylistActivity.class);
+                    startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
                 }
             });
         }
@@ -63,11 +62,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add_playlist) {
-            Intent intent = new Intent(this, AddPlaylistActivity.class);
-            startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
-            return true;
+        if (id == R.id.action_login) {
+            launchLogin(null);
         } else if (id == R.id.action_share_main) {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
@@ -101,6 +97,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void launchLogin(View view){
+        //launch register log in/ log out activity
+        Intent launchLoginIntent = new Intent(getApplicationContext(),
+                LoginActivity.class);
+        startActivityForResult(launchLoginIntent, LOG_IN_REQUEST);
     }
 
     private NetworkFetcher.APICallFactory createPlaylistAPI =

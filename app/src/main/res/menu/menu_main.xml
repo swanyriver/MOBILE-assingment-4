@@ -2,10 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.brandonswanson.assignment4.MainActivity">
-    <item android:id="@+id/action_add_playlist"
+    <item android:id="@+id/action_login"
         android:title="add"
         app:showAsAction="always"
-        android:icon="@drawable/ic_add_circle_white_48dp"
+        android:icon="@drawable/ic_person_white_48dp"
         />
     <item android:id="@+id/action_share_main"
         android:title="share"
