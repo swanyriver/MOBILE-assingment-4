@@ -49,14 +49,20 @@ public class SnippetViewActivity extends AppCompatActivity {
         //Add Playlist FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(TAG, "FAB: add snippet");
-                    Intent intent = new Intent(getApplicationContext(), AddEditSnippetActivity.class);
-                    startActivityForResult(intent, CREATE_SNIPPET_ACTIVITY);
-                }
-            });
+            if (Credentials.getsInstance().belongsToLoggedInUser(
+                    getIntent().getExtras().getString("creator"))) {
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d(TAG, "FAB: add snippet");
+                        Intent intent = new Intent(getApplicationContext(),
+                                AddEditSnippetActivity.class);
+                        startActivityForResult(intent, CREATE_SNIPPET_ACTIVITY);
+                    }
+                });
+            } else {
+                fab.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -66,8 +72,16 @@ public class SnippetViewActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_snippet_view, menu);
+
+
+        if (Credentials.getsInstance().belongsToLoggedInUser(
+                getIntent().getExtras().getString("creator"))) {
+            inflater.inflate(R.menu.menu_snippet_view, menu);
+        } else {
+            inflater.inflate(R.menu.menu_public_snippet_view, menu);
+        }
 
         mAutoplayView = menu.findItem(R.id.action_autoplay);
 
