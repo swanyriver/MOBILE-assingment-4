@@ -33,8 +33,14 @@ public class MainActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), AddPlaylistActivity.class);
-                    startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
+                    if (Credentials.getsInstance().isUserLoggedIn()){
+                        Intent intent = new Intent(getApplicationContext(),
+                                AddPlaylistActivity.class);
+                        startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
+                    } else {
+                        //todo pop up window for sign in
+                        //todo maybe go straight to add playlist after, using another request code
+                    }
                 }
             });
         }
