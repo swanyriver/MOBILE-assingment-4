@@ -64,6 +64,7 @@ public class MainActivityFragment extends Fragment {
         }
     }
 
+    // todo why is this one here and create is in the other one??
     public NetworkFetcher.APICallFactory deletePlaylistAPI =
             new NetworkFetcher.APICallFactory("DELETE", new NetworkFetcher.NetworkFinish() {
         @Override
@@ -83,6 +84,7 @@ public class MainActivityFragment extends Fragment {
         }
     });
 
+    //todo two calls are being made each time i return to this activity,  is it here? is it oncreate and onresume?
     public void refreshPlaylists(){
         new GetAllPlaylists().execute();
     }
