@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
     }
 
+    // todo if this behavior remains then onCreate fragment will need to be removed,  onResume always follows onCreate
     @Override
     protected void onResume() {
         super.onResume();
@@ -154,6 +155,27 @@ public class MainActivity extends AppCompatActivity {
                 //failure
                 Snackbar failureNotification = Snackbar
                         .make(findViewById(R.id.mainOuterLayout), "Playlist Created", Snackbar.LENGTH_LONG);
+                failureNotification.show();
+            }
+        }
+    });
+
+    public NetworkFetcher.APICallFactory deletePlaylistAPI =
+            new NetworkFetcher.APICallFactory("DELETE", new NetworkFetcher.NetworkFinish() {
+                @Override
+                public void onNetworkResponse(int responseCode, String responseMsg) {
+            if (responseCode == 202) {
+                //success
+                Snackbar successNotification = Snackbar
+                        .make(findViewById(R.id.mainOuterLayout), "Playlist deleted", Snackbar.LENGTH_LONG);
+                successNotification.show();
+                MainActivityFragment myFragment = (MainActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.plistFragment);
+                myFragment.refreshPlaylists();
+            } else {
+                //failure
+                Snackbar failureNotification = Snackbar
+                        .make(findViewById(R.id.mainOuterLayout), "Unable to delete playlist", Snackbar.LENGTH_LONG);
                 failureNotification.show();
             }
         }

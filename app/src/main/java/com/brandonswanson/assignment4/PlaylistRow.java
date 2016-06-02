@@ -68,7 +68,8 @@ public class PlaylistRow extends LinearLayout implements View.OnClickListener, V
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.d("DIALOG", "delete playlist: clicked yes");
-                mFragment.deletePlaylistAPI.execute(mPlaylistPreview.URL);
+                ((MainActivity) mFragment.getActivity())
+                        .deletePlaylistAPI.execute(mPlaylistPreview.URL);
             }
         });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {

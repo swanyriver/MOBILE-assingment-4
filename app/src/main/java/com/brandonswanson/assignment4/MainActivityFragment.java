@@ -59,32 +59,9 @@ public class MainActivityFragment extends Fragment {
                     failureNotification.show();
                 }
             }
-
-
         }
     }
 
-    // todo why is this one here and create is in the other one??
-    public NetworkFetcher.APICallFactory deletePlaylistAPI =
-            new NetworkFetcher.APICallFactory("DELETE", new NetworkFetcher.NetworkFinish() {
-        @Override
-        public void onNetworkResponse(int responseCode, String responseMsg) {
-            if (responseCode == 202) {
-                //success
-                Snackbar successNotification = Snackbar
-                        .make(layout, "Playlist deleted", Snackbar.LENGTH_LONG);
-                successNotification.show();
-                refreshPlaylists();
-            } else {
-                //failure
-                Snackbar failureNotification = Snackbar
-                        .make(layout, "Unable to delete playlist", Snackbar.LENGTH_LONG);
-                failureNotification.show();
-            }
-        }
-    });
-
-    //todo two calls are being made each time i return to this activity,  is it here? is it oncreate and onresume?
     public void refreshPlaylists(){
         new GetAllPlaylists().execute();
     }
