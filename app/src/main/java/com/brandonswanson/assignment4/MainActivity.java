@@ -19,12 +19,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int ADD_PLAYLIST_ACTIVITY = 100;
     private static final int LOG_IN_REQUEST = 101;
-    private static final int LOG_IN_TO_ADD_REQUEST = 102;
+    public static final int LOG_IN_TO_ADD_REQUEST = 102;
     private static final String TAG = "MAIN Activity";
     private Button mPublicPlaylistButton;
     private Button mUserPlaylistButton;
     private FrameLayout mPublicPlaylistButtonHighlight;
-    private FrameLayout mUserPlaylistButtonHightlight;
+    private FrameLayout mUserPlaylistButtonHighlight;
     private boolean mShowingPublic = true;
 
     @Override
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         mPublicPlaylistButton = (Button) findViewById(R.id.public_playlist_button);
         mUserPlaylistButton = (Button) findViewById(R.id.user_playlist_button);
         mPublicPlaylistButtonHighlight = (FrameLayout) findViewById(R.id.public_playlist_button_highlight);
-        mUserPlaylistButtonHightlight = (FrameLayout) findViewById(R.id.user_playlist_button_highlight);
+        mUserPlaylistButtonHighlight = (FrameLayout) findViewById(R.id.user_playlist_button_highlight);
     }
 
     private void startAddPlaylistActivity() {
@@ -125,6 +125,10 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar resultNotification = Snackbar
                         .make(findViewById(R.id.mainOuterLayout), msg, Snackbar.LENGTH_LONG);
                 resultNotification.show();
+            }
+
+            if(mShowingPublic){
+                switchPlaylists();
             }
 
             if (requestCode == LOG_IN_TO_ADD_REQUEST) {
@@ -202,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     private void switchPlaylists(){
         mShowingPublic = !mShowingPublic;
         switchVis(mPublicPlaylistButtonHighlight);
-        switchVis(mUserPlaylistButtonHightlight);
+        switchVis(mUserPlaylistButtonHighlight);
         MainActivityFragment myFragment = (MainActivityFragment)
                 getSupportFragmentManager().findFragmentById(R.id.plistFragment);
         myFragment.refreshPlaylists();

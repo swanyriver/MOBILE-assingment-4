@@ -68,18 +68,31 @@ public class MainActivityFragment extends Fragment {
     private void showAddPlaylistSuggestion() {
         //todo show add playlist suggestion
         Log.d(TAG, "showAddPlaylistSuggestion: called");
+        layout.removeAllViews();
+
     }
 
     private void showLogInSuggestion() {
         //todo show log in view
         Log.d(TAG, "showLogInSuggestion: called");
+        layout.removeAllViews();
+        //LayoutInflater inflater = getLayoutInflater();
+        //LinearLayout signInView = inflater.inflate(getResources().getLayout(R.layout.sign_in_pop_up));
+        View signInView = View.inflate(getContext(), R.layout.sign_in_pop_up, null);
+        signInView.findViewById(R.id.pop_up_sign_in_button)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity) getActivity()).launchLogin(MainActivity.LOG_IN_TO_ADD_REQUEST);
+                    }
+                });
+        layout.addView(signInView);
     }
 
     public void refreshPlaylists(){
         if (((MainActivity) getActivity()).showingPublic()){
             new GetAllPlaylists().execute("?public");
         } else {
-            //todo check if not logged in
             if(!Credentials.getsInstance().isUserLoggedIn()){
                 showLogInSuggestion();
             } else {
