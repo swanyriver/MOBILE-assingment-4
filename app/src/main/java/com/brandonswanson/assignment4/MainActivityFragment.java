@@ -26,8 +26,6 @@ public class MainActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         layout = (LinearLayout) view.findViewById(R.id.playlistListView);
 
-        new GetAllPlaylists().execute();
-
         return view;
     }
 

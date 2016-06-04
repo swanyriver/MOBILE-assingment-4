@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, ADD_PLAYLIST_ACTIVITY);
     }
 
-    // todo if this behavior remains then onCreate fragment will need to be removed,  onResume always follows onCreate
     @Override
     protected void onResume() {
         super.onResume();
