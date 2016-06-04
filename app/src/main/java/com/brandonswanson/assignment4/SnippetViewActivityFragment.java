@@ -223,16 +223,6 @@ public class SnippetViewActivityFragment extends Fragment {
                 if (mSnippets == null || mSnippets.size() == 0) {
                     failureNotification.show();
                 } else {
-
-                    //todo find room for title, or move icons
-/*                    try {
-                        JSONObject playlist = new JSONObject(s);
-                        //getActivity().setTitle(playlist.getString("title"));
-                    } catch (JSONException e) {
-                        Log.e(TAG, "onPostExecute: unable to change title");
-                        e.printStackTrace();
-                    }*/
-
                     loadSnippet();
                 }
             }

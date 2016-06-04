@@ -77,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("LOGIN", "onNetworkResponse: code:" + responseCode);
             Log.d("LOGIN", "onNetworkResponse: json:" + responseMsg);
 
-            //todo undo progress indicator and ui disable
             mLoginLayout.setEnabled(true);
 
             if (responseCode == -1) {

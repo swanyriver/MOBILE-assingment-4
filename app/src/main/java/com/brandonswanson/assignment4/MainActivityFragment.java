@@ -72,7 +72,6 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void showLogInSuggestion() {
-        //todo show log in view
         Log.d(TAG, "showLogInSuggestion: called");
         layout.removeAllViews();
         View signInView = View.inflate(getContext(), R.layout.sign_in_pop_up, null);
