@@ -48,6 +48,7 @@ public class PlaylistRow extends LinearLayout implements View.OnClickListener, V
         pViewIntent.putExtra(Constants.URL_KEY, mPlaylistPreview.JSON_URL);
         pViewIntent.putExtra("entity_url", mPlaylistPreview.URL);
         pViewIntent.putExtra("creator", mPlaylistPreview.Creator);
+        pViewIntent.putExtra("isPublic", mPlaylistPreview.isPublic);
         mFragment.startActivity(pViewIntent);
     }
 
@@ -86,6 +87,7 @@ public class PlaylistRow extends LinearLayout implements View.OnClickListener, V
     }
 
     static public class PlaylistPreview {
+
         static public ArrayList<PlaylistPreview> PlaylistPreviewFactory(String JSONplaylists){
             ArrayList<PlaylistPreview> playlistList = new ArrayList<PlaylistPreview>();
             try {
@@ -98,7 +100,8 @@ public class PlaylistRow extends LinearLayout implements View.OnClickListener, V
                                 plist.getString("title"),
                                 plist.getString("creator"),
                                 plist.getString("json"),
-                                plist.getString("url")
+                                plist.getString("url"),
+                                plist.getBoolean("isPublic")
                         ));
 
                     } catch (JSONException e) {
@@ -117,12 +120,14 @@ public class PlaylistRow extends LinearLayout implements View.OnClickListener, V
         public final String Creator;
         public final String JSON_URL;
         public final String URL;
+        public final boolean isPublic;
 
-        public PlaylistPreview(String title, String creator, String jsonUrl, String URL){
+        public PlaylistPreview(String title, String creator, String jsonUrl, String URL, boolean isPublic){
             this.Title = title;
             this.Creator = creator;
             this.JSON_URL = jsonUrl;
             this.URL = URL;
+            this.isPublic = isPublic;
         }
     }
 }

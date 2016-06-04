@@ -75,12 +75,15 @@ public class SnippetViewActivity extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
 
-
         if (Credentials.getsInstance().belongsToLoggedInUser(
                 getIntent().getExtras().getString("creator"))) {
             inflater.inflate(R.menu.menu_snippet_view, menu);
         } else {
             inflater.inflate(R.menu.menu_public_snippet_view, menu);
+        }
+
+        if (!getIntent().getExtras().getBoolean("isPublic")){
+            menu.findItem(R.id.action_share_playlist).setVisible(false);
         }
 
         mAutoplayView = menu.findItem(R.id.action_autoplay);
