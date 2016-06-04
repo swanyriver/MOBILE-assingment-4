@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MAIN Activity";
     private Button mPublicPlaylistButton;
     private Button mUserPlaylistButton;
+    private FrameLayout mPublicPlaylistButtonHighlight;
+    private FrameLayout mUserPlaylistButtonHightlight;
+    private boolean mShowingPublic = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         mPublicPlaylistButton = (Button) findViewById(R.id.public_playlist_button);
         mUserPlaylistButton = (Button) findViewById(R.id.user_playlist_button);
+        mPublicPlaylistButtonHighlight = (FrameLayout) findViewById(R.id.public_playlist_button_highlight);
+        mUserPlaylistButtonHightlight = (FrameLayout) findViewById(R.id.user_playlist_button_highlight);
     }
 
     private void startAddPlaylistActivity() {
@@ -181,12 +187,32 @@ public class MainActivity extends AppCompatActivity {
     });
 
     public void onTabButton(View button) {
-        mUserPlaylistButton.setEnabled(button == mPublicPlaylistButton);
-        mPublicPlaylistButton.setEnabled(button == mUserPlaylistButton);
-        if (button == mPublicPlaylistButton){
-            Log.d(TAG, "onTabButton: switching to PUBLIC playlists");
-        } else {
+        /*mUserPlaylistButton.setEnabled(button == mPublicPlaylistButton);
+        mPublicPlaylistButton.setEnabled(button == mUserPlaylistButton);*/
+
+        if (button == mUserPlaylistButton && mShowingPublic){
             Log.d(TAG, "onTabButton: switching to USER playlists");
+            switchPlaylists();
+        } else if (button == mPublicPlaylistButton && !mShowingPublic) {
+            Log.d(TAG, "onTabButton: switching to PUBLIC playlists");
+            switchPlaylists();
         }
+    }
+
+    private void switchPlaylists(){
+        mShowingPublic = !mShowingPublic;
+        switchVis(mPublicPlaylistButtonHighlight);
+        switchVis(mUserPlaylistButtonHightlight);
+        MainActivityFragment myFragment = (MainActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.plistFragment);
+        myFragment.refreshPlaylists();
+    }
+
+    private void switchVis(View view){
+        view.setVisibility((view.getVisibility() == View.VISIBLE) ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    public boolean showingPublic() {
+        return mShowingPublic;
     }
 }

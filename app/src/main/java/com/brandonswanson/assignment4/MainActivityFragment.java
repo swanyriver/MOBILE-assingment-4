@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
  */
 public class MainActivityFragment extends Fragment {
 
+    private static final String TAG = "MAIN_FRAG" ;
     public LinearLayout layout;
 
     public MainActivityFragment() {
@@ -29,11 +30,11 @@ public class MainActivityFragment extends Fragment {
         return view;
     }
 
-    private class GetAllPlaylists extends AsyncTask<Void,Void,String> {
+    private class GetAllPlaylists extends AsyncTask<String,Void,String> {
 
         @Override
-        protected String doInBackground(Void... params) {
-            return NetworkFetcher.fetchJSON(Constants.PLAYLIST_LIST);
+        protected String doInBackground(String... params) {
+            return NetworkFetcher.fetchJSON(Constants.PLAYLIST_LIST + params[0]);
         }
 
         @Override
@@ -54,13 +55,36 @@ public class MainActivityFragment extends Fragment {
                 }
 
                 if (layout.getChildCount() == 0) {
-                    failureNotification.show();
+                    if (Credentials.getsInstance().isUserLoggedIn()) {
+                        showAddPlaylistSuggestion();
+                    } else {
+                        failureNotification.show();
+                    }
                 }
             }
         }
     }
 
+    private void showAddPlaylistSuggestion() {
+        //todo show add playlist suggestion
+        Log.d(TAG, "showAddPlaylistSuggestion: called");
+    }
+
+    private void showLogInSuggestion() {
+        //todo show log in view
+        Log.d(TAG, "showLogInSuggestion: called");
+    }
+
     public void refreshPlaylists(){
-        new GetAllPlaylists().execute();
+        if (((MainActivity) getActivity()).showingPublic()){
+            new GetAllPlaylists().execute("?public");
+        } else {
+            //todo check if not logged in
+            if(!Credentials.getsInstance().isUserLoggedIn()){
+                showLogInSuggestion();
+            } else {
+                new GetAllPlaylists().execute("");
+            }
+        }
     }
 }

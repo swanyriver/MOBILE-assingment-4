@@ -32,7 +32,6 @@
                 android:layout_height="match_parent">
                 <Button
                     android:text="Public Playlists"
-                    android:enabled="false"
                     android:id="@+id/public_playlist_button"
                     android:onClick="onTabButton"
                     style="@style/Widget.AppCompat.Button.Borderless"
@@ -54,6 +53,40 @@
                     android:layout_height="wrap_content"
                     />
             </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+                <FrameLayout
+                    android:background="#ffffff"
+                    android:id="@+id/public_playlist_button_highlight"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginBottom="3dp"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+                <FrameLayout
+                    android:id="@+id/user_playlist_button_highlight"
+                    android:visibility="invisible"
+                    android:background="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginBottom="3dp"/>
+            </RelativeLayout>
+
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
