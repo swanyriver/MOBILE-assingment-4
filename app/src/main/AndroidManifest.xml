@@ -48,7 +48,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "http://API_ROOT/playlist/” -->
                 <data
-                    android:host="swansonbassign4.appspot.com"
+                    android:host="swansonbfinalproject.appspot.com"
                     android:pathPrefix="/playlist/"
                     android:scheme="http" />
             </intent-filter>

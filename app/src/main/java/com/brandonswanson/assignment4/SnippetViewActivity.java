@@ -49,7 +49,7 @@ public class SnippetViewActivity extends AppCompatActivity {
         //Add Playlist FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
-            if (Credentials.getsInstance().belongsToLoggedInUser(
+            if (getIntent().hasExtra("creator") && Credentials.getsInstance().belongsToLoggedInUser(
                     getIntent().getExtras().getString("creator"))) {
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -75,14 +75,14 @@ public class SnippetViewActivity extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
 
-        if (Credentials.getsInstance().belongsToLoggedInUser(
+        if (getIntent().hasExtra("creator") && Credentials.getsInstance().belongsToLoggedInUser(
                 getIntent().getExtras().getString("creator"))) {
             inflater.inflate(R.menu.menu_snippet_view, menu);
         } else {
             inflater.inflate(R.menu.menu_public_snippet_view, menu);
         }
 
-        if (!getIntent().getExtras().getBoolean("isPublic")){
+        if (!getIntent().hasExtra("isPublic") || !getIntent().getExtras().getBoolean("isPublic")){
             menu.findItem(R.id.action_share_playlist).setVisible(false);
         }
 
